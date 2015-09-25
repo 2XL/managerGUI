@@ -67,3 +67,8 @@ app.factory('Todos', function(){
                 controller: 'TodoDetailCtrl'
             });
     }]);
+
+
+$('#table').bootstrapTable({
+    url: 'data.json'
+});
