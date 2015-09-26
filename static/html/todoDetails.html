@@ -1,3 +1,7 @@
-<h1>{{ todo.name }}</h1>
-completed: <input type="checkbox" ng-model="todo.completed">
-note: <textarea>{{ todo.note }}</textarea>
+<h1></h1>
+completed: <input type="checkbox" ng-model="todo.completed"><br>
+note: <textarea ng-model="todo.note"></textarea><br><br>
+
+<button ng-click="update()">Update</button>
+<button ng-click="remove()">remove</button>
+<a href="/">Cancel</a>

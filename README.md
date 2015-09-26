@@ -26,3 +26,7 @@ SessionStorage: pre tab closure
 # MEAN Stack
 
 CRUD = Create-Read-Update-Delete
+
+# auto nodeserver refresh :
+	sudo npm install -g supervisor
+	run supervisor ./bin/www

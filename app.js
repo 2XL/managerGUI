@@ -5,8 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var memCache = require('memory-cache');
 
@@ -102,10 +100,8 @@ var url = 'mongodb://test:test@ds055822.mongolab.com:55822/benchbox'
 MongoClient.connect(url, function (err, db) {
     assert.equal(null, err);
     console.log("Connected correctly to server");
-
+    /*
     // do db operations
-
-
     mongoOps.insertDocuments(db, function () {
         console.log("Document pushed to the db correctly");
         mongoOps.updateDocument(db, function () {
@@ -119,6 +115,19 @@ MongoClient.connect(url, function (err, db) {
             })
         });
     });
+    */
+});
+
+
+// another mongodb client
+
+var mongoose = require('mongoose');
+mongoose.connect(url, function(err) {
+    if(err) {
+        console.log('connection error', err);
+    } else {
+        console.log('connection successful');
+    }
 });
 
 
@@ -156,11 +165,20 @@ app.use(express.static(path.join(__dirname, 'static')));
 // log the client ip on every request
 
 
+var routes = require('./routes/index');
+var users = require('./routes/users');
+var todos = require('./routes/todos');
 
 
+// api rest
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/todos', todos);
+
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
