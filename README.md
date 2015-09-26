@@ -17,3 +17,12 @@
 	* zerorpc [ref]: http://pycon-2012-notes.readthedocs.org/en/latest/dotcloud_zerorpc.html
 	* mongodb, session storage [ref]: https://docs.mongodb.org/getting-started/node/client/3
 
+
+# todos
+
+LocalStorage: data persistent even on closure of the web browser
+SessionStorage: pre tab closure
+
+# MEAN Stack
+
+CRUD = Create-Read-Update-Delete

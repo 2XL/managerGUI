@@ -55,20 +55,6 @@ app.factory('Todos', function(){
         $scope.todo = Todos[$routeParams.id];
     }])
 
-    .controller('AddHostCtrl', ['$scope', function($scope){
-        $scope.rows = ['Row 1', 'Row 2'];
-
-        $scope.counter = 3;
-
-        $scope.addRow = function() {
-
-            $scope.rows.push('Row ' + $scope.counter);
-            $scope.counter++;
-        }
-    }])
-
-
-
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider
             .when('/', {
@@ -83,6 +69,17 @@ app.factory('Todos', function(){
     }]);
 
 
-$('#table').bootstrapTable({
-    url: 'data.json'
-});
+app.controller('AddHostCtrl', ['$scope', function($scope){
+    $scope.rows = ['Row 1', 'Row 2'];
+
+    $scope.counter = 3;
+
+    $scope.addRow = function() {
+
+        $scope.rows.push('Row ' + $scope.counter);
+        $scope.counter++;
+    }
+}])
+
+
+
