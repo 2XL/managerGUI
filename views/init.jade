@@ -49,6 +49,10 @@ block content
         // class (.)
         // id (#)
         h1= title
+        if session.cookie !== undefined
+            p session found #{session.cookie.httpOnly}
+        else
+            p no session
         //
             .header.clearfix
                 nav
@@ -61,7 +65,7 @@ block content
                 h4 ConfigTabs
             .col-md-8
                 ul.nav.nav-pills
-                    li.active
+                    li
                         a(data-toggle='pill' href='#configManager') Manager
                     li
                         a(data-toggle='pill' href='#configStackSync') StackSync
@@ -71,17 +75,19 @@ block content
                         a(data-toggle='pill' href='#configHosts') Hosts
                     li
                         a(data-toggle='pill' href='#configProfile') Profile
-                    li
+                    li.active
                         a(data-toggle='pill' href='#configConsole') Console
             .col-md-2
-                button.btn.btn-success.btn-block Load Default
+                a.btn.btn-success.btn-block(href='/load') Load Default
         hr
         .row.tab-content
             #configManager.tab-pane.fade
                 .col-md-2
                     h4 Manager
-                .col-md-8
-                    input.form-control(type='text' placeholder='manager.ip')
+                .col-md-6
+                    input.form-control(type='text' placeholder='manager.ip' value='localhost' )
+                .col-md-2
+                    input.form-control(type='text' placeholder='manager.port' value='12345' )
                 .col-md-2
                     button.btn.btn-primary.btn-block Test Connect
 
@@ -90,9 +96,9 @@ block content
                 .col-md-2
                     h4 Stacksync
                 .col-md-4
-                    input.form-control(type='text' placeholder='ss.stacksync.ip')
+                    input.form-control(type='text' placeholder='ss.stacksync.ip' value='#{session.config.ss.stacksync.ip}')
                 .col-md-4
-                    input.form-control(type='text' placeholder='ss.stacksync.port')
+                    input.form-control(type='text' placeholder='ss.stacksync.port' value='#{session.config.ss.stacksync.port}')
                 .col-md-2
                     button.btn.btn-primary.btn-block Test Connect
 
@@ -100,15 +106,15 @@ block content
                 .col-md-2
                     h4 Owncloud
                 .col-md-4
-                    input.form-control(type='text' placeholder='ss.owncloud.ip')
+                    input.form-control(type='text' placeholder='ss.owncloud.ip' value='#{session.config.ss.owncloud.ip}')
                 .col-md-4
-                    input.form-control(type='text' placeholder='ss.owncloud.port')
+                    input.form-control(type='text' placeholder='ss.owncloud.port' value='#{session.config.ss.owncloud.ip}')
                 .col-md-2
                     button.btn.btn-primary.btn-block Test Connect
 
 
 
-            #configHosts.tab-pane.fade.in.active
+            #configHosts.tab-pane.fade
                 .col-md-12
                     div(ng-app="app")
                         ng-view
@@ -118,28 +124,42 @@ block content
                 .col-md-2
                     h4 Profile
                 .col-md-2
-                    input.form-control(type='text' placeholder='sync')
+                    input.form-control(type='text' placeholder='sync' value='#{session.config.profile.sync}')
                 .col-md-2
-                    input.form-control(type='text' placeholder='regular')
+                    input.form-control(type='text' placeholder='regular' value='#{session.config.profile.regular}')
                 .col-md-2
-                    input.form-control(type='text' placeholder='cdn')
+                    input.form-control(type='text' placeholder='cdn' value='#{session.config.profile.cdn}')
                 .col-md-2
-                    input.form-control(type='text' placeholder='backup')
+                    input.form-control(type='text' placeholder='backup' value='#{session.config.profile.backup}')
                 .col-md-2
-                    input.form-control(type='text' placeholder='sync')
+                    input.form-control(type='text' placeholder='sync' value='#{session.config.profile.sync}')
 
-            #configConsole.tab-pane.fade
+            #configConsole.tab-pane.fade.in.active
                 .row.logger
                     .col-md-2
                         h4 Console
+                    .col-md-10
+                        .row
+                            .col-md-3
+                                .btn.btn-primary#btnHello hello
+                            .col-md-3
+                                .btn.btn-info action1
+                            .col-md-3
+                                .btn.btn-warning action2
+                            .col-md-3
+                                .btn.btn-danger action3
+
+                .row.logger
+                    .col-md-2
                     .col-md-10
                         textarea.form-control(disabled rows='10')
                 .row
                     .col-md-2
                     .col-md-8
-                        input.form-control(type='text' placeholder='cmd')
+                        input.form-control#inputCmd(type='text' placeholder='cmd')
                     .col-md-2
-                        button.btn.btn-primary.btn-block Submit
+                        button.btn.btn-primary.btn-block#btnCmd Submit
+
         hr
         footer.footer
             p © AST 2015
@@ -253,3 +273,33 @@ block content
                     }]);
             console.log("Home Script loaded");
 
+        script(type='text/javascript').
+            console.log("button controller");
+
+            $('#btnHello').click(
+                    function () {
+                        console.log("Say hello");
+                        $.get({
+                            url: 'rpc/hello',
+                            type: 'GET',
+                            success: function () {
+                                console.log("Success, say hello!");
+                            }
+                        });
+                    });
+
+
+            $('#btnCmd').click(
+                    function () {
+                        console.log("runCmd: " + $('#inputCmd').val());
+                        $.post(
+                                "http://localhost:3000/login",
+                                {email: email, pass: pass},
+                                function (data) {
+                                    if (data === 'done') {
+                                        window.location.href = "/admin";
+                                    }
+                                });
+
+                    }
+            );

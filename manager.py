@@ -6,10 +6,12 @@ import zerorpc
 class Manager(object):
 
     def hello(self, name):
-        return "Hello, %s" % name
+        print "Requset: -> name {}".format(name)
+        return "Response: -> client: Hello from manager, %s" % name
 
     def goodbye(self, name):
-        return "Goodbye, %s" % name
+        print 'Request: name {}'.format(name)
+        return "Response: -> client: Goodbye from manager, %s" % name
 
     def bad(self):
         raise Exception('xD')

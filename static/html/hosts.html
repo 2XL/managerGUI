@@ -22,34 +22,44 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <td>#</td>
-                        <td>hostname</td>
-                        <td>ip</td>
-                        <td>logging</td>
-                        <td>option</td>
+                        <td class="col-md-1">
+                            #
+                        </td>
+                        <td class="col-md-3">
+                            hostname
+                        </td>
+                        <td class="col-md-3">
+                            ip
+                        </td>
+                        <td class="col-md-2">
+                            logging
+                        </td>
+                        <td class="col-md-3">
+                            option
+                        </td>
                     </tr>
                 </thead>
                 <tbody>
 
                     <tr ng-repeat="host in hosts | filter: search">
-                        <td>
+                        <td class="col-md-1">
                             <p>{{$index}} </p>
 
                         </td>
-                        <td>
+                        <td class="col-md-3">
                             <input class="form-control" ng-show="editing[$index]" type="text" ng-model="host.hostname" >
                             <p ng-show="!editing[$index]">{{host.hostname}}</p>
                         </td>
-                        <td>
+                        <td class="col-md-3">
                             <input class="form-control" ng-show="editing[$index]" type="text" ng-model="host.ip" >
                             <p ng-show="!editing[$index]">{{host.ip}}</p>
                         </td>
-                        <td>
+                        <td class="col-md-2">
                             <input class="form-control" ng-show="editing[$index]" type="text" ng-model="host.logging">
                             <a ng-show="!editing[$index]" href="#/{{host._id}}">{{host.logging}}</a>
                         </td>
 
-                        <td>
+                        <td class="col-md-3">
                             <button class="btn btn-info" ng-show="!editing[$index]" ng-click="edit($index)">edit
                             </button>
                             <button class="btn btn-danger" ng-show="!editing[$index]" ng-click="remove($index)">
@@ -72,7 +82,7 @@
 <div class="row">
     <div class="col-md-2">
         <h5>
-            New task
+            New Host
         </h5>
     </div>
     <div class="col-md-3">

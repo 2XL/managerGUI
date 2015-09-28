@@ -131,6 +131,26 @@ mongoose.connect(url, function (err) {
 
 
 // ------------------------------------------------------------------------
+// -- load file system
+// ------------------------------------------------------------------------
+
+/*
+var fs = require('fs');
+var path = require('path');
+var filePath = path.join(__dirname, 'static/json/config.json')
+var obj;
+
+fs.readFile(filePath, 'utf8', function(err, data){
+
+    if (err) throw err;
+    obj = JSON.parse(data);
+    console.log('configuration', obj);
+});
+*/
+
+
+
+// ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
 // -- view engine setup ---------------------------------------------------
 // ------------------------------------------------------------------------
@@ -190,9 +210,6 @@ app.use(function(req, res, next) {
 });
 
 
-app.get('')
-
-
 
 
 
@@ -217,6 +234,7 @@ var hosts = require('./routes/hosts');
 var inits = require('./routes/init');
 var homes = require('./routes/home');
 var loads = require('./routes/load');
+var rpcs = require('./routes/rpc');
 
 // api rest
 
@@ -227,6 +245,7 @@ app.use('/home', homes);
 app.use('/hosts', hosts);
 app.use('/init', inits);
 app.use('/load', loads);
+app.use('/rpc', rpcs);
 
 
 
