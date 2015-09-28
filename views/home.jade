@@ -23,18 +23,6 @@ block content
         ng-view
 
 
-    script(id='/todos.html' type="text/ng-template").
-        Search: <input type='text' ng-model='search.name'>
-        <ul>
-        <li ng-repeat="todo in todos | filter: search">
-        <input type="checkbox" ng-model="todo.completed">
-        <a href="#/{{$index}}">{{todo.name}}</a>
-        </li>
-        </ul>
-    script(id='/todoDetails.html' type="text/ng-template").
-        <h1>{{todo.name }}</h1>
-        completed: <input type="checkbox" ng-model="todo.completed">
-        note: <textarea>{{todo.note }}</textarea>
 
 
     script(type='text/javascript').

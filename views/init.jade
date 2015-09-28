@@ -1,0 +1,255 @@
+extends layout
+
+block css
+    link(rel='stylesheet', href='/stylesheets/style.css')
+
+    // style libs bootstrap
+    link(rel='stylesheet', href='css/style.css')
+
+    // BOOTSTRAP
+    link(rel='stylesheet', href='css/bootstrap.min.css')
+    link(rel='stylesheet', href='css/bootstrap-theme.min.css')
+    link(rel='stylesheet', href='css/bootstrap-table.css')
+
+
+
+block js
+    // ANGULAR
+    // script(src='js/angular.min.js')
+    script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js')
+    // script(src='js/angular-route.min.js')
+    script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js')
+    script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-resource.js')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
+    // BOOTSTRAP
+    script(src='js/bootstrap.min.js')
+    script(src='js/bootstrap-table-all.js')
+
+    // CUSTOM
+    script(src='js/init.js')
+
+
+    // STATIC
+    script(src='js/config.js')
+
+
+block template
+    // TEMPLATES
+    script(id='/hosts.html' type="text/ng-template").
+        Search: <input type='text' ng-model='search.name'>
+        <ul>
+        <li ng-repeat="host in hosts | filter: search">
+        <input type="checkbox" ng-model="host.completed">
+        <a href="#/{{$index}}">{{host.name}}</a>
+        </li>
+        </ul>
+
+block content
+    .container#container
+        // class (.)
+        // id (#)
+        h1= title
+        //
+            .header.clearfix
+                nav
+                    ul.nav.nav-pills.pull-right
+                        li.active(role="presentation")
+                            a Home
+
+        .row
+            .col-md-2
+                h4 ConfigTabs
+            .col-md-8
+                ul.nav.nav-pills
+                    li.active
+                        a(data-toggle='pill' href='#configManager') Manager
+                    li
+                        a(data-toggle='pill' href='#configStackSync') StackSync
+                    li
+                        a(data-toggle='pill' href='#configOwncloud') Owncloud
+                    li
+                        a(data-toggle='pill' href='#configHosts') Hosts
+                    li
+                        a(data-toggle='pill' href='#configProfile') Profile
+                    li
+                        a(data-toggle='pill' href='#configConsole') Console
+            .col-md-2
+                button.btn.btn-success.btn-block Load Default
+        hr
+        .row.tab-content
+            #configManager.tab-pane.fade
+                .col-md-2
+                    h4 Manager
+                .col-md-8
+                    input.form-control(type='text' placeholder='manager.ip')
+                .col-md-2
+                    button.btn.btn-primary.btn-block Test Connect
+
+
+            #configStackSync.tab-pane.fade
+                .col-md-2
+                    h4 Stacksync
+                .col-md-4
+                    input.form-control(type='text' placeholder='ss.stacksync.ip')
+                .col-md-4
+                    input.form-control(type='text' placeholder='ss.stacksync.port')
+                .col-md-2
+                    button.btn.btn-primary.btn-block Test Connect
+
+            #configOwncloud.tab-pane.fade
+                .col-md-2
+                    h4 Owncloud
+                .col-md-4
+                    input.form-control(type='text' placeholder='ss.owncloud.ip')
+                .col-md-4
+                    input.form-control(type='text' placeholder='ss.owncloud.port')
+                .col-md-2
+                    button.btn.btn-primary.btn-block Test Connect
+
+
+
+            #configHosts.tab-pane.fade.in.active
+                .col-md-12
+                    div(ng-app="app")
+                        ng-view
+
+
+            #configProfile.tab-pane.fade
+                .col-md-2
+                    h4 Profile
+                .col-md-2
+                    input.form-control(type='text' placeholder='sync')
+                .col-md-2
+                    input.form-control(type='text' placeholder='regular')
+                .col-md-2
+                    input.form-control(type='text' placeholder='cdn')
+                .col-md-2
+                    input.form-control(type='text' placeholder='backup')
+                .col-md-2
+                    input.form-control(type='text' placeholder='sync')
+
+            #configConsole.tab-pane.fade
+                .row.logger
+                    .col-md-2
+                        h4 Console
+                    .col-md-10
+                        textarea.form-control(disabled rows='10')
+                .row
+                    .col-md-2
+                    .col-md-8
+                        input.form-control(type='text' placeholder='cmd')
+                    .col-md-2
+                        button.btn.btn-primary.btn-block Submit
+        hr
+        footer.footer
+            p © AST 2015
+
+        script(type='text/javascript').
+            angular.module('app', ['ngRoute', 'ngResource'])
+                //---------------
+                // Services
+                //---------------
+
+                    .factory('Hosts', ['$resource', function ($resource) {
+                        // quin api rest utilitzar???
+                        return $resource('/hosts/:id', null, {
+                            'update': {
+                                method: 'PUT'
+                            }
+                        });
+                    }])
+                //---------------
+                // Controllers
+                //---------------
+
+                // hostDetails.html
+                    .controller('HostDetailCtrl', ['$scope', '$routeParams', 'Hosts', '$location', function ($scope,
+                                                                                                             $routeParams, Hosts, $location) {
+                        $scope.host = Hosts.get({id: $routeParams.id});
+
+                        $scope.update = function () {
+                            Hosts.update({id: $scope.host._id}, $scope.host, function () {
+                                $location.url('/home');
+                            });
+                        };
+                        $scope.remove = function () {
+                            Hosts.remove({id: $scope.host._id}, function () {
+                                $location.url('/home');
+                            });
+                        };
+                    }])
+
+                // hosts.html
+                    .controller('HostController', ['$scope', 'Hosts', function ($scope, Hosts) {
+                        // controller actions
+                        $scope.editing = []; //  variable
+
+                        // Invocar manager de hosts
+                        $scope.hosts = Hosts.query(); // llistat de tots els hosts
+
+                        $scope.saveHost = function () {
+                            console.log('SaveHosts');
+                            console.log($scope);
+                            /*
+                             if (!$scope.newHostHostname || $scope.newHostHostname.length < 1) return;
+                             if (!$scope.newHostIp || $scope.newHostIp.length < 1) return;
+                             if (!$scope.newHostLogging || $scope.newHostLogging.length < 1) return;
+                             */
+                            var host = new Hosts({
+                                hostname: $scope.newHostHostname,
+                                ip: $scope.newHostIp,
+                                logging: $scope.newHostLogging
+                            });
+                            host.$save(function () {
+                                $scope.hosts.push(host);
+                                $scope.newHostHostname = ''; // clear textbox
+                                $scope.newHostIp = ''; // clear textbox
+                                $scope.newHostLogging = ''; // clear textbox
+                            });
+                            console.log(host);
+                            console.log($scope.hosts);
+                        };
+
+                        $scope.save = function () {
+                            if (!$scope.newHost || $scope.newHost.length < 1) return;
+                            var host = new Hosts({name: $scope.newHost, completed: false});
+                            host.$save(function () {
+                                $scope.hosts.push(host);
+                                $scope.newHost = ''; // clear textbox
+                            });
+                        };
+                        $scope.update = function (index) {
+                            var host = $scope.hosts[index];
+                            Hosts.update({id: host._id}, host);
+                            $scope.editing[index] = false;
+                        };
+                        $scope.edit = function (index) {
+                            $scope.editing[index] = angular.copy($scope.hosts[index]);
+                        };
+                        $scope.cancel = function (index) {
+                            $scope.hosts[index] = angular.copy($scope.editing[index]);
+                            $scope.editing[index] = false;
+                        };
+                        $scope.remove = function (index) {
+                            var host = $scope.hosts[index];
+                            Hosts.remove({id: host._id}, function () {
+                                $scope.hosts.splice(index, 1);
+                            });
+                        };
+                    }])
+                //---------------
+                // Routes
+                //---------------
+                    .config(['$routeProvider', function ($routeProvider) {
+                        $routeProvider
+                                .when('/', { // quan accedeixo al root de home es criden aquests controladors
+                                    templateUrl: 'html/hosts.html',
+                                    controller: 'HostController'
+                                })
+                                .when('/:id', { // si especifico amb un id es crida aquest
+                                    templateUrl: 'html/hostDetails.html',
+                                    controller: 'HostDetailCtrl'
+                                });
+                    }]);
+            console.log("Home Script loaded");
+

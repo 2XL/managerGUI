@@ -1,19 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
-
-/* GET home page. */
+var sess;
+/* GET init page. */
 router.get('/', function (req, res, next) {
-
-
     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     console.log('Client IP: ', ip);
+    var sess = req.session;
 
+    console.log("Session", sess);
 
-    res.render('index', {title: 'Express'});
+   res.render('init', {title: 'Init'});
 });
-
-
 
 
 
