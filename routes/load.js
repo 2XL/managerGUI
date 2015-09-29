@@ -28,7 +28,7 @@ router.get('/', function (req, res, next) {
         sess.config = obj[0];
 
 
-        console.log("Session load vars", JSON.stringify(sess, null , 2));
+        // console.log("Session load vars", JSON.stringify(sess, null , 2));
         /*
          console.log("Session", sess);
          */

@@ -3,6 +3,7 @@ import multiprocessing
 from zerorpc import zmq
 import subprocess
 import json
+import urllib
 
 # this is the manager server
 
@@ -21,15 +22,23 @@ class Manager(object):
         return "Response: -> client: Start from manager, %s" % name
 
     def cmd(self, name):
+
+        str = urllib.quote_plus(name)
+        print name
+        print str
         print 'Request: -> cmd {}'.format(name)
-        return "Response: -> client: Cmd from manager, %s" % name
+        bashCommand = "{}".format(name)
+        output = subprocess.check_output(['bash','-c', bashCommand])
+        # json.dumps("Response: -> client: List from manager " % name),
+        return output.split('\n')
+
 
     def list(self, name):
         print 'Request: -> list {}'.format(name)
         bashCommand = "ls {}".format(name)
         output = subprocess.check_output(['bash','-c', bashCommand])
         # json.dumps("Response: -> client: List from manager " % name),
-        return  output.split('\n')
+        return output.split('\n')
 
     def bad(self):
         raise Exception('xD')

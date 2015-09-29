@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
     console.log('Client IP: ', ip);
     var sess = req.session;
 
-    console.log("Session load vars", JSON.stringify(sess, null , 2));
+    // console.log("Session load vars", JSON.stringify(sess, null , 2));
 
    res.render('init', {title: 'Init', session: sess});
 });
