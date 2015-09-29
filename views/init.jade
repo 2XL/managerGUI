@@ -116,6 +116,11 @@ block content
 
 
 
+            #configMonitor.tab-pane.fade
+                .col-md-12
+                    h4 Monitor
+
+
             #configHosts.tab-pane.fade
                 .col-md-12
                     div(ng-app="app")
@@ -137,30 +142,28 @@ block content
                     input.form-control(type='text' placeholder='sync' value='#{session.config.profile.sync}')
 
             #configConsole.tab-pane.fade.in.active
-                .row.logger
-                    .col-md-2
-                        h4 Console
-                    .col-md-10
-                        .row
-                            .col-md-3
-                                .btn.btn-primary.btn-block#btnHello hello
-                            .col-md-3
-                                .btn.btn-info.btn-block#btnGoodbye goodbye
-                            .col-md-3
-                                .btn.btn-warning.btn-block#btnStart start
-                            .col-md-3
-                                .btn.btn-danger.btn-block#btnList list
 
-                .row.logger
-                    .col-md-2
-                    .col-md-10
-                        textarea.form-control#loggerFrame(disabled rows='20')
-                .row
-                    .col-md-2
-                    .col-md-8
-                        input.form-control#inputCmd(type='text' placeholder='cmd' value='ls -l')
-                    .col-md-2
-                        button.btn.btn-primary.btn-block#btnCmd Submit
+                .col-md-2
+                    h4 Console
+                .col-md-10
+                    .row
+                        .col-md-3
+                            .btn.btn-primary.btn-block#btnHello hello
+                        .col-md-3
+                            .btn.btn-info.btn-block#btnGoodbye goodbye
+                        .col-md-3
+                            .btn.btn-warning.btn-block#btnStart start
+                        .col-md-3
+                            .btn.btn-danger.btn-block#btnList list
+
+                    .row.logger
+                        .col-md-12
+                            textarea.form-control.font-mono-size#loggerFrame(disabled rows='20' style='font-size: x-small')
+                    .row
+                        .col-md-10
+                            input.form-control#inputCmd(type='text' placeholder='cmd' value='ls -l')
+                        .col-md-2
+                            button.btn.btn-primary.btn-block#btnCmd Submit
 
         hr
         footer.footer
@@ -298,19 +301,7 @@ block content
                         {cmd: $('#inputCmd').val()},
                         function (data) {
                             console.log("success hello!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-                            $('#loggerFrame').val('');
-                            lines = JSON.parse(data.result);
-                            console.log(lines)
-
-                            console.log("Show")
-                            lines.forEach(function (line, idx) {
-                                console.log(line)
-                                if (line !== '')
-                                    $('#loggerFrame').val($('#loggerFrame').val() + line + '\n');
-                            })
-
-                            $('#loggerFrame').scrollTop($('#loggerFrame')[0].scrollHeight);
+                            writeToLogger('loggerFrame',data);
 
                         });
                     console.log("Success, run cmd!");
@@ -352,22 +343,28 @@ block content
                         success: function (data) {
                             console.log("Success, say list!");
                             console.log(data);
-                            $('#loggerFrame').val('');
-                            lines = JSON.parse(data.result);
-                            console.log(lines)
-
-                            console.log("Show")
-                            lines.forEach(function (line, idx) {
-                                console.log(line)
-                                if (line !== '')
-                                    $('#loggerFrame').val($('#loggerFrame').val() + line + '\n');
-                            })
-
-                            $('#loggerFrame').scrollTop($('#loggerFrame')[0].scrollHeight);
-                            //for(line in lines)
-                               // console.log(lines[line]);
-                                // $('#loggerFrame').val($('#loggerFrame').val() + line);
-
+                            writeToLogger('loggerFrame',data);
                         }
                     });
                 });
+
+            writeToLogger = function(loggerID, lines){
+                data = lines;
+                // clear logger content
+                $('#'+loggerID).val('');
+                lines = JSON.parse(data.result);
+
+                // publish new data
+                console.log(lines)
+                console.log("Show")
+                lines.forEach(function (line, idx) {
+                console.log(line)
+                    if (line !== '')
+                        $('#'+loggerID).val($('#'+loggerID).val() + line + '\n');
+                })
+                $('#'+loggerID).scrollTop($('#'+loggerID)[0].scrollHeight);
+                    //for(line in lines)
+                       // console.log(lines[line]);
+                        // $('#loggerFrame').val($('#loggerFrame').val() + line);
+
+            }
