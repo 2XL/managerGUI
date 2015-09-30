@@ -4,7 +4,7 @@ from zerorpc import zmq
 import subprocess
 import json
 import urllib
-
+import nmap
 # this is the manager server
 
 class Manager(object):
@@ -43,6 +43,25 @@ class Manager(object):
     def bad(self):
         raise Exception('xD')
 
+
+    def nmap(self, port, ip):
+        print 'Request: -> ping {}:{}'.format(ip, port)
+        output = subprocess.check_output(['nmap','-p', port, ip])
+
+        result = output.split('\n')
+        print result
+        if len(result) > 5:
+            print result[5]
+            print result[5].split()[1]
+            # print result[5].split(' ', 1)
+            if result[5].split()[1] == 'open':
+                print result[5]
+                print result[5].split()[1]
+                return True
+        return False
+
+    def rpc(self):
+        print 'Request: -> rpc to dummyhost'
 
 def ManagerRPC():
     print 'ManagerRPC instance'

@@ -53,6 +53,46 @@ router.get('/start', function (req, res, next) {
 
 
 /* GET manager rpc page. */
+router.get('/nmap', function (req, res, next) {
+    // el servidor rep una peticio get,
+    //console.log(req.params)
+    console.log("COMMAND: ");
+    console.log(req.url)
+    var cmd = req.url.split('=')[1].replace(/\+/g, ' ');
+    console.log(cmd);
+    //console.log(" ex: ------------->", queryString.extract(req.params));
+    //console.log(" ex: ------------->", queryString.parse(req.params));
+    // console.log(" parse: --> Query String", queryString.parse(location.search))
+
+    client.invoke('nmap', cmd.split(' ')[1], cmd.split(' ')[0], function (error, resp, more) {
+        if (error) {
+            console.log("Error:", error)
+        }
+        console.log(resp)
+
+
+
+        res.json({result: JSON.stringify(resp)})
+    });
+});
+
+
+/* GET manager rpc page. */
+router.get('/list', function (req, res, next) {
+    // el servidor rep una peticio get,
+
+
+    client.invoke('list', "~", function (error, resp, more) {
+        if (error) {
+            console.log("Error:", error)
+        }
+        console.log(resp)
+
+        res.json({result: JSON.stringify(resp)})
+    });
+});
+
+/* GET manager rpc page. */
 router.get('/cmd', function (req, res, next) {
     // el servidor rep una peticio get,
     //console.log(req.params)
@@ -68,22 +108,6 @@ router.get('/cmd', function (req, res, next) {
 
 
     client.invoke('cmd', cmd, function (error, resp, more) {
-        if (error) {
-            console.log("Error:", error)
-        }
-        console.log(resp)
-
-        res.json({result: JSON.stringify(resp)})
-    });
-});
-
-
-/* GET manager rpc page. */
-router.get('/list', function (req, res, next) {
-    // el servidor rep una peticio get,
-
-
-    client.invoke('list', "~", function (error, resp, more) {
         if (error) {
             console.log("Error:", error)
         }
