@@ -15,8 +15,9 @@ router.get('/goodbye', function (req, res, next) {
             console.log("Error:", error)
         }
         console.log(resp);
+
+        res.json(resp)
     });
-    res.json({})
 
 });
 
@@ -30,10 +31,30 @@ router.get('/hello', function (req, res, next) {
             console.log("Error:", error)
         }
         console.log(resp);
+
+        res.json(resp)
     });
-    res.json({})
 
 });
+
+
+/* GET manager rpc/rpc page. */
+router.get('/rpc', function (req, res, next) {
+    // el servidor rep una peticio get,
+    console.log('RPC/RPC');
+    console.log(req.url);
+    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+
+    client.invoke('rpc', fullUrl, function (error, resp, more) {
+        if (error) {
+            console.log("Error:", error)
+        }
+        console.log(resp);
+        res.json({})
+    });
+
+});
+
 
 
 /* GET manager rpc page. */
@@ -47,8 +68,8 @@ router.get('/start', function (req, res, next) {
         }
         console.log(resp);
 
+        res.json(resp)
     });
-    res.json({})
 });
 
 
@@ -68,7 +89,7 @@ router.get('/nmap', function (req, res, next) {
         if (error) {
             console.log("Error:", error)
         }
-        console.log(resp)
+        console.log(resp);
 
 
 
@@ -97,9 +118,9 @@ router.get('/cmd', function (req, res, next) {
     // el servidor rep una peticio get,
     //console.log(req.params)
     console.log("COMMAND: ");
-    console.log(req.url)
+    console.log(req.url);
     var cmd = req.url.split('=')[1].replace(/\+/g, ' ');
-    cmd = cmd.replace(/%2F/g,'/');
+    cmd = JSON.stringify(cmd);
     console.log(cmd);
     //console.log(" ex: ------------->", queryString.extract(req.params));
     //console.log(" ex: ------------->", queryString.parse(req.params));

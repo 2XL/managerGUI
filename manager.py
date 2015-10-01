@@ -3,11 +3,20 @@ import multiprocessing
 from zerorpc import zmq
 import subprocess
 import json
+import urlparse
 import urllib
 import nmap
+import init as Init
+# importar el init.py
+
+
+
+
+
 # this is the manager server
 
 class Manager(object):
+
 
     def hello(self, name):
         print "Request: -> hello {}".format(name)
@@ -60,8 +69,17 @@ class Manager(object):
                 return True
         return False
 
-    def rpc(self):
+    def rpc(self, url):
         print 'Request: -> rpc to dummyhost'
+        print url # full url
+
+        str = urlparse.urlparse(url)
+        print str
+        print str.query
+        argslist = urlparse.parse_qs(str.query)
+        print argslist
+
+        return argslist
 
 def ManagerRPC():
     print 'ManagerRPC instance'

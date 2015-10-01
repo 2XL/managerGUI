@@ -74,9 +74,9 @@ block content
                     li
                         a(data-toggle='pill' href='#configManager') Manager
                     li
-                        a(data-toggle='pill' href='#configStackSync') StackSync
+                        a(data-toggle='pill' href='#configSyncServer') SyncServer
                     li
-                        a(data-toggle='pill' href='#configOwncloud') Owncloud
+                        a(data-toggle='pill' href='#configLogServer') LogServer
                     li.active
                         a(data-toggle='pill' href='#configHosts') Hosts
                     li
@@ -99,50 +99,52 @@ block content
                     .col-md-2
                         button.btn.btn-primary.btn-block(onclick="testConnection($('#manager-ip').val(),$('#manager-port').val())") Test Connect
 
-            #configStackSync.tab-pane.fade
-                .col-md-2
-                    h4 Stacksync
-                .col-md-4
-                    input.form-control#stacksync-ip(type='text' placeholder='ss.stacksync.ip' value='#{session.config.ss.stacksync.ip}')
-                .col-md-4
-                    input.form-control#stacksync-port(type='text' placeholder='ss.stacksync.port' value='#{session.config.ss.stacksync.port}')
-                .col-md-2
-                    button.btn.btn-primary.btn-block(onclick="testConnection($('#stacksync-ip').val(),$('#stacksync-port').val())") Test Connect
+            #configSyncServer.tab-pane.fade
+                .row
+                    .col-md-2
+                        h4 SyncServer
+                    .col-md-4
+                        input.form-control#stacksync-ip(type='text' placeholder='ss.stacksync.ip' value='#{session.config.ss.stacksync.ip}')
+                    .col-md-4
+                        input.form-control#stacksync-port(type='text' placeholder='ss.stacksync.port' value='#{session.config.ss.stacksync.port}')
+                    .col-md-2
+                        button.btn.btn-primary.btn-block(onclick="testConnection($('#stacksync-ip').val(),$('#stacksync-port').val())") Test Connect
+                .row
+                    .col-md-2
+                        h4 LogServer
+                    .col-md-4
+                        input.form-control#owncloud-ip(type='text' placeholder='ss.owncloud.ip' value='#{session.config.ss.owncloud.ip}')
+                    .col-md-4
+                        input.form-control#owncloud-port(type='text' placeholder='ss.owncloud.port' value='#{session.config.ss.owncloud.port}')
+                    .col-md-2
+                        button.btn.btn-primary.btn-block(onclick="testConnection($('#owncloud-ip').val(),$('#owncloud-port').val())") Test Connect
 
-            #configOwncloud.tab-pane.fade
-                .col-md-2
-                    h4 Owncloud
-                .col-md-4
-                    input.form-control#owncloud-ip(type='text' placeholder='ss.owncloud.ip' value='#{session.config.ss.owncloud.ip}')
-                .col-md-4
-                    input.form-control#owncloud-port(type='text' placeholder='ss.owncloud.port' value='#{session.config.ss.owncloud.port}')
-                .col-md-2
-                    button.btn.btn-primary.btn-block(onclick="testConnection($('#owncloud-ip').val(),$('#owncloud-port').val())") Test Connect
-
+            #configLogServer.tab-pane.fade
+                .row
+                    .col-md-2
+                        p Graphite
+                    .col-md-4
+                        input.form-control#graphite-ip(type='text' placeholder='ls.graphite.ip' value='#{session.config.ls.graphite.ip}')
+                    .col-md-4
+                        input.form-control#graphite-port(type='text' placeholder='ls.graphite.port' value='#{session.config.ls.graphite.port}')
+                    .col-md-2
+                        button.btn.btn-primary.btn-block(onclick="testConnection($('#graphite-ip').val(),$('#graphite-port').val())") Test Connect
 
 
             #configMonitor.tab-pane.fade
                 .col-md-2
                     h4 Monitor
                 .col-md-10
-                    .row
-                        .col-md-2
-                            p graphana
-                        .col-md-4
-                            input.form-control#grafana-ip(type='text' placeholder='ls.grafana.ip' value='#{session.config.ls.grafana.ip}')
-                        .col-md-4
-                            input.form-control#grafana-port(type='text' placeholder='ls.grafana.port' value='#{session.config.ls.grafana.port}')
-                        .col-md-2
-                            button.btn.btn-primary.btn-block(onclick="testConnection($('#grafana-ip').val(),$('#grafana-port').val())") Test Connect
-                    .row
-                        .col-md-2
-                            p graphite
-                        .col-md-4
-                            input.form-control#graphite-ip(type='text' placeholder='ls.graphite.ip' value='#{session.config.ls.graphite.ip}')
-                        .col-md-4
-                            input.form-control#graphite-port(type='text' placeholder='ls.graphite.port' value='#{session.config.ls.graphite.port}')
-                        .col-md-2
-                            button.btn.btn-primary.btn-block(onclick="testConnection($('#graphite-ip').val(),$('#graphite-port').val())") Test Connect
+                    //
+                        .row
+                            .col-md-2
+                                p graphana
+                            .col-md-4
+                                input.form-control#grafana-ip(type='text' placeholder='ls.grafana.ip' value='#{session.config.ls.grafana.ip}')
+                            .col-md-4
+                                input.form-control#grafana-port(type='text' placeholder='ls.grafana.port' value='#{session.config.ls.grafana.port}')
+                            .col-md-2
+                                button.btn.btn-primary.btn-block(onclick="testConnection($('#grafana-ip').val(),$('#grafana-port').val())") Test Connect
                     .row
                         .col-md-2
                             p Select graph:
@@ -159,17 +161,17 @@ block content
                             .row.tab-content
                                 #graphCPU.tab-pane.fade.in.active
                                     .col-md-12
-                                        img.center-block#monitorCPU
+                                        img.img-responsive.center-block#monitorCPU(alt='cpuMonitor')
                                     // (src='https://ast03:8443/render/?width=586&height=308&target=carbon.agents.vagrant-ubuntu-trusty-64-1.cpuUsage')
 
                                 #graphRAM.tab-pane.fade
                                     .col-md-12
-                                        img.center-block#monitorRAM
+                                        img.img-responsive.center-block#monitorRAM(alt='ramMonitor')
                                     // (src='https://ast03:8443/render/?width=586&height=308&target=carbon.agents.vagrant-ubuntu-trusty-64-1.memUsage')
 
                                 #graphNET.tab-pane.fade
                                     .col-md-12
-                                        img.center-block#monitorNET
+                                        img.img-responsive.center-block#monitorNET(alt='netMonitor')
                                     //(src='https://ast03:8443/render/?width=586&height=308&target=carbon.agents.vagrant-ubuntu-trusty-64-1.pointsPerUpdate&target=carbon.agents.vagrant-ubuntu-trusty-64-1.updateOperations')
 
 
@@ -341,6 +343,8 @@ block content
                              Hosts.update({id: host._id}, host);
                              $scope.editing[index] = false;
                              */
+
+
                         };
 
 
@@ -500,9 +504,32 @@ block content
             };
 
             // cmd should be an object
-            rpcHost = function(rpc, cmd, cb){
-                console.log(rpc)
-                console.log(cmd)
+            rpcHost = function(host, cmd, cb){
+
+                var args = {
+                    ip: host.ip,
+                    hostname: host.hostname,
+                    login: host.logging,
+                    cmd: cmd
+                };
+                console.log(args);
+                console.log(cmd);
+
+                $.ajax({
+                    url: 'http://localhost:3000/rpc/rpc',
+                    data: args,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log("Success, run start!");
+                        console.log(data);
+                        $.notify('Success!', 'success');
+                    },
+                    error: function () {
+                        console.log('pc, Error');
+                        $.notify('Error!', 'error');
+                    }
+                });
+
 
             }
 
@@ -517,7 +544,7 @@ block content
 
             $('#monitorCPU').graphite({
                // url: "http://myserver/render/",
-                from: "-2hours",
+                from: "-1hours",
                 target: [
                     "carbon.agents.vagrant-ubuntu-trusty-64-1.cpuUsage"
                 ],
@@ -526,7 +553,7 @@ block content
 
             $('#monitorRAM').graphite({
                // url: "http://myserver/render/",
-                from: "-2hours",
+                from: "-1hours",
                 target: [
                     "carbon.agents.vagrant-ubuntu-trusty-64-1.memUsage"
                 ],
@@ -535,7 +562,7 @@ block content
 
             $('#monitorNET').graphite({
                // url: "http://myserver/render/",
-                from: "-2hours",
+                from: "-1hours",
                 colorList: 'red,green',
                 target: [
                     "alias(carbon.agents.vagrant-ubuntu-trusty-64-1.pointsPerUpdate, 'pointsPerUpdate')",
