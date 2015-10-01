@@ -50,7 +50,7 @@ router.get('/rpc', function (req, res, next) {
             console.log("Error:", error)
         }
         console.log(resp);
-        res.json({})
+        res.json(resp)
     });
 
 });
@@ -107,7 +107,7 @@ router.get('/list', function (req, res, next) {
         if (error) {
             console.log("Error:", error)
         }
-        console.log(resp)
+        console.log(resp);
 
         res.json({result: JSON.stringify(resp)})
     });
@@ -120,7 +120,7 @@ router.get('/cmd', function (req, res, next) {
     console.log("COMMAND: ");
     console.log(req.url);
     var cmd = req.url.split('=')[1].replace(/\+/g, ' ');
-    cmd = JSON.stringify(cmd);
+    // cmd = JSON.stringify(cmd);
     console.log(cmd);
     //console.log(" ex: ------------->", queryString.extract(req.params));
     //console.log(" ex: ------------->", queryString.parse(req.params));
@@ -128,14 +128,14 @@ router.get('/cmd', function (req, res, next) {
     // console.log(" parse: --> Query String", queryString.parse(location.search))
 
 
-    client.invoke('cmd', cmd, function (error, resp, more) {
+    (client.invoke('cmd', cmd, function (error, resp, more) {
         if (error) {
             console.log("Error:", error)
         }
-        console.log(resp)
+        // console.log(JSON.stringify(resp))
 
         res.json({result: JSON.stringify(resp)})
-    });
+    }));
 });
 
 

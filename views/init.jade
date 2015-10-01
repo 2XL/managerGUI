@@ -90,32 +90,32 @@ block content
         hr
         .row.tab-content.frame-fixed-size
             #configManager.tab-pane.fade
-                    .col-md-2
-                        h4 Manager
-                    .col-md-6
-                        input.form-control#manager-ip(type='text' placeholder='manager.ip' value='localhost' )
-                    .col-md-2
-                        input.form-control#manager-port(type='text' placeholder='manager.port' value='4242' )
-                    .col-md-2
-                        button.btn.btn-primary.btn-block(onclick="testConnection($('#manager-ip').val(),$('#manager-port').val())") Test Connect
+                .col-md-2
+                    h4 Manager
+                .col-md-6
+                    input.bb-config.form-control#manager-ip(type='text' placeholder='manager.ip' value='localhost' )
+                .col-md-2
+                    input.bb-config.form-control#manager-port(type='text' placeholder='manager.port' value='4242' )
+                .col-md-2
+                    button.btn.btn-primary.btn-block(onclick="testConnection($('#manager-ip').val(),$('#manager-port').val())") Test Connect
 
             #configSyncServer.tab-pane.fade
                 .row
                     .col-md-2
                         h4 SyncServer
                     .col-md-4
-                        input.form-control#stacksync-ip(type='text' placeholder='ss.stacksync.ip' value='#{session.config.ss.stacksync.ip}')
+                        input.bb-config.form-control#stacksync-ip(type='text' placeholder='ss.stacksync.ip' value='#{session.config.ss.stacksync.ip}')
                     .col-md-4
-                        input.form-control#stacksync-port(type='text' placeholder='ss.stacksync.port' value='#{session.config.ss.stacksync.port}')
+                        input.bb-config.form-control#stacksync-port(type='text' placeholder='ss.stacksync.port' value='#{session.config.ss.stacksync.port}')
                     .col-md-2
                         button.btn.btn-primary.btn-block(onclick="testConnection($('#stacksync-ip').val(),$('#stacksync-port').val())") Test Connect
                 .row
                     .col-md-2
                         h4 LogServer
                     .col-md-4
-                        input.form-control#owncloud-ip(type='text' placeholder='ss.owncloud.ip' value='#{session.config.ss.owncloud.ip}')
+                        input.bb-config.form-control#owncloud-ip(type='text' placeholder='ss.owncloud.ip' value='#{session.config.ss.owncloud.ip}')
                     .col-md-4
-                        input.form-control#owncloud-port(type='text' placeholder='ss.owncloud.port' value='#{session.config.ss.owncloud.port}')
+                        input.bb-config.form-control#owncloud-port(type='text' placeholder='ss.owncloud.port' value='#{session.config.ss.owncloud.port}')
                     .col-md-2
                         button.btn.btn-primary.btn-block(onclick="testConnection($('#owncloud-ip').val(),$('#owncloud-port').val())") Test Connect
 
@@ -124,9 +124,9 @@ block content
                     .col-md-2
                         p Graphite
                     .col-md-4
-                        input.form-control#graphite-ip(type='text' placeholder='ls.graphite.ip' value='#{session.config.ls.graphite.ip}')
+                        input.bb-config.form-control#graphite-ip(type='text' placeholder='ls.graphite.ip' value='#{session.config.ls.graphite.ip}')
                     .col-md-4
-                        input.form-control#graphite-port(type='text' placeholder='ls.graphite.port' value='#{session.config.ls.graphite.port}')
+                        input.bb-config.form-control#graphite-port(type='text' placeholder='ls.graphite.port' value='#{session.config.ls.graphite.port}')
                     .col-md-2
                         button.btn.btn-primary.btn-block(onclick="testConnection($('#graphite-ip').val(),$('#graphite-port').val())") Test Connect
 
@@ -186,15 +186,15 @@ block content
                 .col-md-2
                     h4 Profile
                 .col-md-2
-                    input.form-control(type='text' placeholder='sync' value='#{session.config.profile.sync}')
+                    input.bb-config.form-control#profile-sync(type='text' placeholder='sync' value='#{session.config.profile.sync}')
                 .col-md-2
-                    input.form-control(type='text' placeholder='regular' value='#{session.config.profile.regular}')
+                    input.bb-config.form-control#profile-regular(type='text' placeholder='regular' value='#{session.config.profile.regular}')
                 .col-md-2
-                    input.form-control(type='text' placeholder='cdn' value='#{session.config.profile.cdn}')
+                    input.bb-config.form-control#profile-cdn(type='text' placeholder='cdn' value='#{session.config.profile.cdn}')
                 .col-md-2
-                    input.form-control(type='text' placeholder='backup' value='#{session.config.profile.backup}')
+                    input.bb-config.form-control#profile-backup(type='text' placeholder='backup' value='#{session.config.profile.backup}')
                 .col-md-2
-                    input.form-control(type='text' placeholder='sync' value='#{session.config.profile.sync}')
+                    input.bb-config.form-control#profile-idle(type='text' placeholder='idle' value='#{session.config.profile.idle}')
 
             #configConsole.tab-pane.fade
 
@@ -272,12 +272,12 @@ block content
 
                         $scope.update = function () {
                             Hosts.update({id: $scope.host._id}, $scope.host, function () {
-                                $location.url('/home');
+                                $location.url('/load');
                             });
                         };
                         $scope.remove = function () {
                             Hosts.remove({id: $scope.host._id}, function () {
-                                $location.url('/home');
+                                $location.url('/load');
                             });
                         };
                     }])
@@ -331,14 +331,14 @@ block content
                             console.log(host)
                             testConnection(host.ip, 22); // port ssh
                             /*
-                            Hosts.update({id: host._id}, host);
-                            $scope.editing[index] = false;
-                            */
+                             Hosts.update({id: host._id}, host);
+                             $scope.editing[index] = false;
+                             */
                         };
                         $scope.rpc = function (index, cmd) {
                             var host = $scope.hosts[index];
                             console.log(host)
-                            rpcHost(host,cmd); // port ssh
+                            rpcHost(host, cmd); // port ssh
                             /*
                              Hosts.update({id: host._id}, host);
                              $scope.editing[index] = false;
@@ -346,7 +346,6 @@ block content
 
 
                         };
-
 
 
                         $scope.edit = function (index) {
@@ -380,6 +379,7 @@ block content
             console.log("Home Script loaded");
 
         script(type='text/javascript').
+            GLOBAL_VAR = null
             console.log("button controller");
 
             $('#btnHello').click(
@@ -472,13 +472,13 @@ block content
 
 
             testConnection = function (ip, port, cb) {
-                console.log('PING ---->',ip,port);
+                console.log('PING ---->', ip, port);
                 // if i dont need to use the failure  function they recommend me to use post or get
                 console.log("Get list");
                 $.ajax({
                     url: 'http://localhost:3000/rpc/nmap',
                     contentType: "application/json; charset=utf-8",
-                    data: {data: ip + ' '+ port},
+                    data: {data: ip + ' ' + port},
                     dataType: 'json',
                     type: 'GET',
                     success: function (data) {
@@ -487,24 +487,24 @@ block content
                         console.log(JSON.parse(JSON.stringify(data)));
                         console.log('...');
 
-                        if(JSON.parse(data.result)){
-                            $.notify('Success!', 'success');
-                        }else{
-                            $.notify('Warning!', 'warn');
+                        if (JSON.parse(data.result)) {
+                            $.notify('Success! ping(' + ip + ':' + port + ')', 'success');
+                        } else {
+                            $.notify('Warning! ping(' + ip + ':' + port + ')', 'warn');
                         }
 
                         // $.notify('Hello','info');
 
                     },
-                    error: function(data){
-                        console.log('pc, Error');
-                        $.notify('Error!', 'error');
+                    error: function (err) {
+                        console.log('pc, Error ping(' + ip + ':' + port + ')', err);
+                        $.notify('Error! '+err, 'error ');
                     }
                 });
             };
 
             // cmd should be an object
-            rpcHost = function(host, cmd, cb){
+            rpcHost = function (host, cmd, cb) {
 
                 var args = {
                     ip: host.ip,
@@ -513,27 +513,53 @@ block content
                     cmd: cmd
                 };
                 console.log(args);
-                console.log(cmd);
-
+                console.log(args);
+                appendAllParams(args, 'bb-config');
+                appendAllHosts(args, 'bb-hosts');
                 $.ajax({
                     url: 'http://localhost:3000/rpc/rpc',
                     data: args,
+                    timeout: 6000000, // 6000s ::100min
                     type: 'GET',
                     success: function (data) {
                         console.log("Success, run start!");
-                        console.log(data);
-                        $.notify('Success!', 'success');
+                        console.log(JSON.stringify(data));
+                        $.notify('Success! ' + host.hostname + ' ' + cmd, 'success');
                     },
-                    error: function () {
-                        console.log('pc, Error');
-                        $.notify('Error!', 'error');
+                    error: function (err) {
+                        console.log('pc, Error '+host+' '+cmd+' ', err);
+                        $.notify('Error! '+err, 'error');
                     }
                 });
+            };
 
 
-            }
 
-            notifyButtonById = function(btnId){
+
+            appendAllParams = function (target, className) {
+                $('.' + className).each(function () {
+                    target[$(this).attr("id")] = ($(this).attr('value'));
+                });
+            };
+
+            appendAllHosts = function (target, className) {
+                target.hosts = {};
+                $('.'+className).each(function () {
+
+                    target.hosts[$(this).find('p.host-name').text()] = {
+                        ip :$(this).find('p.host-ip').text(),
+                        login: $(this).find('p.host-login').text()
+                    };
+                // $(this).find('p.host-name');
+
+                console.log(target.hosts);
+                });
+
+                GLOBAL_VAR =target
+            };
+
+
+            notifyButtonById = function (btnId) {
               // self
             };
 
@@ -570,5 +596,8 @@ block content
                 ],
                 title: "NetworkMonitor"
             });
+
+
+            console.log(GLOBAL_VAR);
 
             // TODO refresh onclick

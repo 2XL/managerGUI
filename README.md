@@ -30,3 +30,8 @@ CRUD = Create-Read-Update-Delete
 # auto nodeserver refresh :
 	sudo npm install -g supervisor
 	run supervisor ./bin/www
+
+
+# instalar graphite log server
+	https://github.com/obfuscurity/synthesize
+	* at the mamanger machine, as a virtual machine or a deamon.
