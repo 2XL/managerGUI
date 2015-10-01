@@ -130,8 +130,81 @@ class ManagerOps():
 
 
 
-    def setProfile(self, h, hostname, idx, CONFIG):  # tell each hosts their profile
-        print 'setProfile'
+    def assignCredentialsToProfile(self, h, hostname):
+        str_cmd = "" \
+                  "if [ -d BenchBox ]; then " \
+                  "cd BenchBox; " \
+                  "git pull; " \
+                  "cd vagrant; " \
+                  "echo '%s' > ss.stacksync.key; " \
+                  "echo '%s' > ss.owncloud.key; " \
+                  "echo '%s' > hostname; " \
+                  "echo 'Run: clients configuration scripts: '; " \
+                  "cd scripts; " \
+                  "./config.owncloud.sh; " \
+                  "./config.stacksync.sh; " \
+                  "echo 'clients configuration files generated'; " \
+                  "fi; " % (h['cred-stacksync'],h['cred-owncloud'], h['hostname'])
+        # print str_cmd
+        self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
+        print 'credentials/OK: {}:[{}] => {} / {}'.format(hostname)
+
+
+    def assignSyncServer(self, h, hostname, args):
+
+        # print 'sserver'
+        # print config
+        owncloud_ip = args['owncloud-ip']
+        stacksync_ip = args['stacksync-ip']
+
+        str_cmd = "" \
+                  "if [ -d BenchBox ]; then " \
+                  "cd BenchBox/vagrant; " \
+                  "echo '%s' > ss.stacksync.ip; " \
+                  "echo '%s' > ss.owncloud.ip; " \
+                  "fi; " % (stacksync_ip, owncloud_ip)
+
+        # print str_cmd
+        self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
+        print 'sserver/OK {} : {}'.format(hostname)
+
+
+
+    def vagrantUp(self, h, hostname):
+        print 'run: Call Vagrant init at each host: {}'.format(hostname)
+        str_cmd = "" \
+                  "if [ -d BenchBox ]; then " \
+                  "cd BenchBox;" \
+                  "git pull; " \
+                  "cd vagrant; " \
+                  "echo '-------------------------------'; " \
+                  "ls -l *.box; " \
+                  "vagrant -v; " \
+                  "VBoxManage --version; " \
+                  "echo '-------------------------------'; " \
+                  "VBoxManage list runningvms | wc -l > running; " \
+                  "vagrant up sandBox; " \
+                  "vagrant provision sandBox; " \
+                  "vagrant up benchBox; " \
+                  "vagrant provision benchBox; " \
+                  "else " \
+                  "echo 'Vagrant Project not Found!??'; " \
+                  "fi;" \
+                  ""
+        # print str_cmd
+        self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
+        print 'run/OK {}/{}'.format(hostname)
+
+
+    def start_node_server(self, h):
+        print 'run the nodejs monitor server at each Dummy Host'
+
+        str_cmd = "cd BenchBox/monitor; " \
+                  "nohup /usr/local/bin/npm start & "
+        self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
+        print 'nodeserver running at {}:{}'.format(h['ip'], '5000')
+
+
 
 
     def rmi(self, hostname, login, passwd, cmd, callback=None):
