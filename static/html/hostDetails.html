@@ -12,28 +12,24 @@
         <div class="row">
             <div class="form-group">
                 <label for="completed">completed:</label>
-                <input class="checkbox" id="completed" type="checkbox" ng-model="todo.completed">
+                <input class="checkbox" id="completed" type="checkbox" ng-show="{{host.completed}}" ng-model="host.completed">
             </div>
             <div class="form-group">
                 <label for="note">note:</label>
-                <textarea class="form-control"  id='note' ng-model="todo.note"></textarea>
+                <textarea class="form-control" id='note' ng-model="host.note">{{host.note}}</textarea>
             </div>
             <div class="form-group">
                 <label for="profile">profile:</label>
-                <input class="form-control" id='profile' ng-model="todo.profile">
+                <input class="form-control" id='profile' value="{{host.profile}}" ng-model="host.profile">
             </div>
             <div class="form-group">
                 <label for="cred_stacksync">stacksync:</label>
-                <input type="text" class="form-control" id='cred_stacksync' ng-model="todo.cred_stacksync">
+                <input type="text" class="form-control" id='cred_stacksync' value="{{host.cred_stacksync}}" ng-model="host.cred_stacksync">
             </div>
             <button class="btn btn-primary" ng-click="update()">Update</button>
             <button class="btn btn-danger" ng-click="remove()">Remove</button>
-            <a class="btn btn-warning" href="/load">Cancel</a>
+            <button class="btn btn-warning" onclick="window.history.back();">Cancel</button>
         </div>
-
-
-
-
     </div>
 </div>
 

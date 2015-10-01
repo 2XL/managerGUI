@@ -272,12 +272,12 @@ block content
 
                         $scope.update = function () {
                             Hosts.update({id: $scope.host._id}, $scope.host, function () {
-                                $location.url('/load');
+                                $location.url('/');
                             });
                         };
                         $scope.remove = function () {
                             Hosts.remove({id: $scope.host._id}, function () {
-                                $location.url('/load');
+                                $location.url('/');
                             });
                         };
                     }])
@@ -484,7 +484,7 @@ block content
                     success: function (data) {
                         console.log('pc, Result:');
                         console.log(data)
-                        console.log(JSON.parse(JSON.stringify(data)));
+                        // console.log(JSON.parse(JSON.stringify(data)));
                         console.log('...');
 
                         if (JSON.parse(data.result)) {
