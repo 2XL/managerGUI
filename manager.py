@@ -196,6 +196,14 @@ class ManagerOps():
         print 'run/OK {}/{}'.format(hostname)
 
 
+    def runTest(self, h, args):
+        print 'run specific targeted test at a target node... how to target 2nd layer virtualization???'
+        # 1st ssh to the dummy host
+        # 2nd have a script at dummy to relay the execution...
+        # otherwise how???
+
+
+
     def start_node_server(self, h):
         print 'run the nodejs monitor server at each Dummy Host'
 
