@@ -35,8 +35,8 @@ class ManagerOps():
 
     # tenir un fitxer de status, per no torna a repetir procés
 
+    HOST_RUN_STATUS = {}
     HOST_STATUS = {}
-
 
     def __init__(self):
         print 'ManagerExecutive'
@@ -48,18 +48,35 @@ class ManagerOps():
         h = {
             'ip': args['ip'][0],
             'passwd': args['login'][0],
-            'user': args['login'][0]
+            'user': args['login'][0],
+            'cred_stacksync': args['cred_stacksync'][0],
+            'cred_owncloud': args['cred_owncloud'][0],
+            'profile': args['profile'][0],
+            'stacksync-ip': args['stacksync-ip'][0],
+            'owncloud-ip': args['owncloud-ip'][0]
         }
         print h
         hostname = args['hostname'][0]
         print hostname
-        self.downloadBenchBox(h,hostname)
-        self.installVagrantVBox(h,hostname)
+        if not self.HOST_STATUS.has_key(hostname):
+            print 'dont have {}'.format(hostname)
+            self.HOST_STATUS[hostname] = {}
+        else:
+            print 'have {}'.format(hostname)
 
-    def downloadBenchBox(self, h, hostname):  # tell all the hosts to download BenchBox
+        self.t1downloadBenchBox(h,hostname)
+        self.t2installVagrantVBox(h,hostname)
+        self.t3downloadVagrantBoxImg(h, hostname)
+        self.t4assignStereoTypeToProfile(h, hostname)
+        self.t5assignCredentialsToProfile(h, hostname)
+        self.t6assignSyncServer(h, hostname)
 
-        if self.HOST_STATUS[hostname] > 2: return False
-        print 'downloadBenchBox'
+        return self.HOST_STATUS[hostname]
+
+    def t1downloadBenchBox(self, h, hostname):  # tell all the hosts to download BenchBox
+        if self.HOST_STATUS[hostname].has_key('t1downloadBenchBox'):
+            return True
+        print 't1downloadBenchBox'
         str_cmd = "" \
                   "echo 'check if Git is installed...'; " \
                   "echo '%s' | sudo -S apt-get install git; " \
@@ -71,19 +88,21 @@ class ManagerOps():
                   "git clone --recursive https://github.com/2XL/BenchBox.git; " \
                   "fi;" \
                   "" % h['passwd']
-        print str_cmd
+        # print str_cmd
 
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd) # utilitzar un worker del pool
-
+        self.HOST_STATUS[hostname]['t1downloadBenchBox'] = True
         '''
         versió pool
         '''
-        print 'downloadBenchBox/OK: {}'.format(hostname)
+        print 't1downloadBenchBox/OK: {}'.format(hostname)
 
 
-    def installVagrantVBox(self, h, hostname):    # tell all the hosts to install VirtualBox and Vagrant
-        print 'installVagrantVBox'
-
+    def t2installVagrantVBox(self, h, hostname):    # tell all the hosts to install VirtualBox and Vagrant
+        if self.HOST_STATUS[hostname].has_key('t2installVagrantVBox'):
+            print 'HAS true'
+            return True
+        print 't2installVagrantVBox'
         str_cmd = "" \
                   "if [ -d BenchBox ]; then " \
                   "cd BenchBox;" \
@@ -92,14 +111,17 @@ class ManagerOps():
                   "echo '%s' | sudo -S ./installVagrantVBox.sh; " \
                   "fi;" \
                   "" % h['passwd']
-        print str_cmd
-
+        # print str_cmd
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
-        print 'installVagrantVBox/OK: {}'.format(hostname)
+        self.HOST_STATUS[hostname]['t2installVagrantVBox'] = True
+        print 't2installVagrantVBox/OK: {}'.format(hostname)
 
 
-    def downloadVagrantBoxImg(self, h, hostname):  # tell the hosts to download Vagrant box to use
-        print 'downloadVagrantBoxImg'
+    def t3downloadVagrantBoxImg(self, h, hostname):  # tell the hosts to download Vagrant box to use
+        if self.HOST_STATUS[hostname].has_key('t3downloadVagrantBoxImg'):
+            print 'HAS true'
+            return True
+        print 't3downloadVagrantBoxImg'
         str_cmd = "" \
                   "if [ -d BenchBox ]; then " \
                   "cd BenchBox;" \
@@ -110,11 +132,15 @@ class ManagerOps():
                   ""
         #print str_cmd
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
-        print 'downloadVagrantBoxImg/OK: {}'.format(hostname)
+        self.HOST_STATUS[hostname]['t3downloadVagrantBoxImg'] = True
+        print 't3downloadVagrantBoxImg/OK: {}'.format(hostname)
 
 
-    def assignStereoTypeToProfile(self, h, hostname):
-        print 'assignStereoTypeToProfile'
+    def t4assignStereoTypeToProfile(self, h, hostname):
+        #if self.HOST_STATUS[hostname].has_key('t4assignStereoTypeToProfile'):
+        #    print 'HAS true'
+        #    return True
+        print 't4assignStereoTypeToProfile'
         str_cmd = "" \
                   "if [ -d BenchBox ]; then " \
                   "cd BenchBox;" \
@@ -125,12 +151,16 @@ class ManagerOps():
 
         #print str_cmd
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
+        self.HOST_STATUS[hostname]['t4assignStereoTypeToProfile'] = True
+        print 't4assignStereoTypeToProfile/OK: {} :: {}'.format(hostname, h['profile'])
 
-        print 'assignStereoTypeToProfile/OK: {} :: {}'.format(hostname, h['profile'])
 
 
-
-    def assignCredentialsToProfile(self, h, hostname):
+    def t5assignCredentialsToProfile(self, h, hostname):
+        #if self.HOST_STATUS[hostname].has_key('t5assignCredentialsToProfile'):
+        #    print 'HAS true'
+        #    return True
+        print 't5assignCredentialsToProfile'
         str_cmd = "" \
                   "if [ -d BenchBox ]; then " \
                   "cd BenchBox; " \
@@ -144,18 +174,22 @@ class ManagerOps():
                   "./config.owncloud.sh; " \
                   "./config.stacksync.sh; " \
                   "echo 'clients configuration files generated'; " \
-                  "fi; " % (h['cred-stacksync'],h['cred-owncloud'], h['hostname'])
+                  "fi; " % (h['cred_stacksync'],h['cred_owncloud'], hostname)
         # print str_cmd
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
-        print 'credentials/OK: {}:[{}] => {} / {}'.format(hostname)
+        self.HOST_STATUS[hostname]['t5assignCredentialsToProfile'] = True
+        print 't5assignCredentialsToProfile/OK: {}'.format(hostname)
 
 
-    def assignSyncServer(self, h, hostname, args):
-
+    def t6assignSyncServer(self, h, hostname):
+        #if self.HOST_STATUS[hostname].has_key('t6assignSyncServer'):
+        #    print 'HAS true'
+        #    return True
+        print 't6assignSyncServer'
         # print 'sserver'
         # print config
-        owncloud_ip = args['owncloud-ip']
-        stacksync_ip = args['stacksync-ip']
+        owncloud_ip = h['owncloud-ip']
+        stacksync_ip = h['stacksync-ip']
 
         str_cmd = "" \
                   "if [ -d BenchBox ]; then " \
@@ -166,11 +200,46 @@ class ManagerOps():
 
         # print str_cmd
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
-        print 'sserver/OK {} : {}'.format(hostname)
+        self.HOST_STATUS[hostname]['t6assignSyncServer'] = True
+        print 't6assignSyncServer/OK {} '.format(hostname)
 
 
 
-    def vagrantUp(self, h, hostname):
+    def vagrantUp(self, args):
+
+        # if self.HOST_STATUS[hostname]
+        h = {
+            'ip': args['ip'][0],
+            'passwd': args['login'][0],
+            'user': args['login'][0],
+            'cred_stacksync': args['cred_stacksync'][0],
+            'cred_owncloud': args['cred_owncloud'][0],
+            'profile': args['profile'][0],
+            'stacksync-ip': args['stacksync-ip'][0],
+            'owncloud-ip': args['owncloud-ip'][0]
+        }
+        print h
+        hostname = args['hostname'][0]
+        print hostname
+
+        if self.HOST_STATUS[hostname].has_key(hostname):
+            print 'setup exists'
+        else:
+            print 'setup required'
+
+        if len(self.HOST_STATUS[hostname]) == 6:
+            for s in self.HOST_STATUS[hostname]:
+                if (self.HOST_STATUS[hostname][s]):
+                    continue
+                else:
+                    self.HOST_RUN_STATUS[hostname] = 'host setup error'; # use run code...
+                    break
+        else:
+            self.HOST_RUN_STATUS[hostname] = 'host not setup {}'.format(len(self.HOST_STATUS[hostname]));
+
+        self.HOST_RUN_STATUS[hostname] = 'host ready to start!'
+        # if not hasattr(self.HOST_STATUS[hostname],'vagrantUp'): return True
+
         print 'run: Call Vagrant init at each host: {}'.format(hostname)
         str_cmd = "" \
                   "if [ -d BenchBox ]; then " \
@@ -193,7 +262,11 @@ class ManagerOps():
                   ""
         # print str_cmd
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
-        print 'run/OK {}/{}'.format(hostname)
+        #
+
+        print 'host running!!!'
+        self.HOST_RUN_STATUS[hostname] = True
+        print 'run/OK {}/{}'.format(hostname, self.HOST_RUN_STATUS[hostname])
 
 
     def runTest(self, h, args):
@@ -311,20 +384,23 @@ class Manager(object):
 
     def rpc(self, url):
         print 'Request: -> rpc to dummyhost'
-        print url # full url
+        #print url # full url
 
         str = urlparse.urlparse(url)
-        print str
-        print str.query
+        #print str
+        #print str.query
         argslist = urlparse.parse_qs(str.query)
         toExecute = getattr(self.ops, argslist['cmd'][0])
-        toExecute(argslist)
-        print argslist
+        result = toExecute(argslist)
+        #print argslist
+        #print argslist
+        print 'command {}'.format( argslist['cmd'][0])
+        argslist['result'] = result;
         return argslist
 
 def ManagerRPC():
     print 'ManagerRPC instance'
-    s = zerorpc.Server(Manager())
+    s = zerorpc.Server(Manager(), pool_size=4) #numero de cpu
     server_address = "tcp://0.0.0.0:4242"
     s.bind(server_address)
     s.run()

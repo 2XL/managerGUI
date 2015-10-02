@@ -497,6 +497,7 @@ block content
 
                     },
                     error: function (err) {
+                        console.log(err)
                         console.log('pc, Error ping(' + ip + ':' + port + ')', err);
                         $.notify('Error! '+err, 'error ');
                     }
@@ -510,6 +511,9 @@ block content
                     ip: host.ip,
                     hostname: host.hostname,
                     login: host.logging,
+                    profile: host.profile,
+                    cred_stacksync: host.cred_stacksync,
+                    cred_owncloud: host.cred_owncloud,
                     cmd: cmd
                 };
                 console.log(args);
@@ -527,6 +531,7 @@ block content
                         $.notify('Success! ' + host.hostname + ' ' + cmd, 'success');
                     },
                     error: function (err) {
+                        console.log(err)
                         console.log('pc, Error '+host+' '+cmd+' ', err);
                         $.notify('Error! '+err, 'error');
                     }
@@ -549,6 +554,7 @@ block content
                     target.hosts[$(this).find('p.host-name').text()] = {
                         ip :$(this).find('p.host-ip').text(),
                         login: $(this).find('p.host-login').text()
+
                     };
                 // $(this).find('p.host-name');
 

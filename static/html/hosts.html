@@ -34,10 +34,10 @@
                         <td class="col-md-1">
                             logging
                         </td>
-                        <td class="col-md-2">
+                        <td class="col-md-3">
                             option
                         </td>
-                        <td class="col-md-4">
+                        <td class="col-md-3">
                             action
                         </td>
                     </tr>
@@ -61,23 +61,24 @@
                             <p class="host-login" ng-show="!editing[$index]">{{host.logging}}</p>
                         </td>
 
-                        <td class="col-md-2">
-                            <button class="btn btn-info" ng-show="!editing[$index]" ng-click="edit($index)">edit
+                        <td class="col-md-3">
+                            <button class="btn btn-info btn-sm" ng-show="!editing[$index]" ng-click="edit($index)">edit
                             </button>
-                            <button class="btn btn-danger" ng-show="!editing[$index]" ng-click="remove($index)">
+                            <button class="btn btn-danger btn-sm" ng-show="!editing[$index]" ng-click="remove($index)">
                                 remove</button>
-                            <button class="btn btn-warning" ng-show="editing[$index]" ng-click="update($index)">
+                            <button class="btn btn-warning btn-sm" ng-show="editing[$index]" ng-click="update($index)">
                                 Update</button>
-                            <button class="btn btn-primary" ng-show="editing[$index]" ng-click="cancel($index)">
+                            <button class="btn btn-primary btn-sm" ng-show="editing[$index]" ng-click="cancel($index)">
                                 Cancel</button>
 
                             <a class="btn btn-mini" href="#/{{host._id}}" ng-show="!editing[$index]">
                                 More</a>
 
                         </td>
-                        <td class="col-md-4">
+                        <td class="col-md-3">
                             <button class="btn btn-xs" ng-click="ping($index)">Ping</button>
                             <button class="btn btn-xs" ng-click="rpc($index,'setup')" title="Download BenchBox project to the dummy machine">Setup</button>
+                            <button class="btn btn-xs" ng-click="rpc($index,'vagrantUp')" title="Run Vagrant up at dummy machine">Up</button>
                         </td>
                     </tr>
                 </tbody>
