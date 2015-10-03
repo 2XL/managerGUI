@@ -222,7 +222,7 @@ class ManagerOps():
         hostname = args['hostname'][0]
         print hostname
 
-        if self.HOST_STATUS[hostname].has_key(hostname):
+        if self.HOST_STATUS.has_key(hostname):
             print 'setup exists'
         else:
             print 'setup required'
@@ -240,7 +240,7 @@ class ManagerOps():
         self.HOST_RUN_STATUS[hostname] = 'host ready to start!'
         # if not hasattr(self.HOST_STATUS[hostname],'vagrantUp'): return True
 
-        print 'run: Call Vagrant init at each host: {}'.format(hostname)
+        print 'run: Call Vagrant init at host: {}'.format(hostname)
         str_cmd = "" \
                   "if [ -d BenchBox ]; then " \
                   "cd BenchBox;" \
@@ -261,6 +261,8 @@ class ManagerOps():
                   "fi;" \
                   ""
         # print str_cmd
+        print str_cmd
+        print h
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
         #
 
@@ -271,6 +273,7 @@ class ManagerOps():
 
     def monitorUp(self, h, args):
         print 'tell sandBox at dummy host to start SocketListener'
+        # have session at the dummy host
 
 
 
@@ -297,6 +300,7 @@ class ManagerOps():
     def rmi(self, hostname, login, passwd, cmd, callback=None):
         while True:
             try:
+                print 'try'
                 options={"StrictHostKeyChecking": "no", "UserKnownHostsFile": "/dev/null", "timeout": "3600"}
                 s = pxssh.pxssh()
                 s.login(hostname, login, passwd)
@@ -309,6 +313,7 @@ class ManagerOps():
             except pxssh.ExceptionPxssh, e:
                 print "pxssh failed on login."
                 print str(e)
+                print 'error'
                 continue
             break
 
@@ -316,8 +321,28 @@ class ManagerOps():
             return callback()
 
 
+    def rmisandBox(self, hostname, login, passwd, cmd, callback=None):
+        sandboxIP = '192.168.56.101'
+        sandboxUser = 'vagrant'
+        sandboxPass = 'vagrant'
+
+        str_cmd = " " \
+                  "sshpass -p {} ssh {}@{} {}" \
+                  " ".format(sandboxPass,  sandboxUser, sandboxIP, cmd)
+        print str_cmd
+        self.rmi(hostname, login, passwd, str_cmd)
 
 
+    def rmibenchBox(self, hostname, login, passwd, cmd, callback=None):
+        benchboxIP = '192.168.56.2'
+        benchboxUser = 'vagrant'
+        benchboxPass = 'vagrant'
+
+        str_cmd = " " \
+                  "sshpass -p {} ssh {}@{} {}" \
+                  " ".format(benchboxPass,  benchboxUser, benchboxIP, cmd)
+        print str_cmd
+        self.rmi(hostname, login, passwd, str_cmd)
 
 # this is the manager server
 

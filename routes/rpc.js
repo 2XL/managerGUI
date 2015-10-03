@@ -97,10 +97,10 @@ router.get('/nmap', function (req, res, next) {
             console.log("Error:", error)
         }
         console.log(resp);
-        // res.json({result: JSON.stringify(resp)})
+        res.json({result: JSON.stringify(resp)})
     });
 
-    res.json({result: JSON.stringify({})})
+    // res.json({result: JSON.stringify({})})
 });
 
 
