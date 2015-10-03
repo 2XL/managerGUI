@@ -288,15 +288,7 @@ class ManagerOps():
         hostname = args['hostname'][0]
         print hostname
         print 'tell sandBox at dummy host to start SocketListener'
-        str_cmd =   "" \
-                    "echo 'start socketListener'; " \
-                    "if [ -d ~/monitor ]; then " \
-                    "cd ~/monitor/logger/py_cpu_monitor && python SocketListener.py; " \
-                    "echo 'stacksync client and monitor started'; " \
-                    "else " \
-                    "echo 'stacksync client monitoring not available'; " \
-                    "fi" \
-                    ""
+        str_cmd = './monitor/startMonitor.sh'
         self.rmisandBox(h['ip'], h['user'], h['passwd'], str_cmd)
         # have session at the dummy host
 
