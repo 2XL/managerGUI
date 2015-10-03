@@ -269,6 +269,12 @@ class ManagerOps():
         print 'run/OK {}/{}'.format(hostname, self.HOST_RUN_STATUS[hostname])
 
 
+    def monitorUp(self, h, args):
+        print 'tell sandBox at dummy host to start SocketListener'
+
+
+
+
     def runTest(self, h, args):
         print 'run specific targeted test at a target node... how to target 2nd layer virtualization???'
         # 1st ssh to the dummy host
@@ -344,7 +350,6 @@ class Manager(object):
         return "Response: -> client: Start from manager, %s" % name
 
     def cmd(self, name):
-
         str = urllib.quote_plus(name)
         print name
         print str
@@ -365,7 +370,6 @@ class Manager(object):
     def bad(self):
         raise Exception('xD')
 
-
     def nmap(self, port, ip):
         print 'Request: -> ping {}:{}'.format(ip, port)
         output = subprocess.check_output(['nmap','-p', port, ip])
@@ -373,14 +377,15 @@ class Manager(object):
         result = output.split('\n')
         print result
         if len(result) > 5:
-            print result[5]
-            print result[5].split()[1]
+            #print result[5]
+            #print result[5].split()[1]
             # print result[5].split(' ', 1)
             if result[5].split()[1] == 'open':
                 print result[5]
                 print result[5].split()[1]
                 return True
         return False
+
 
     def rpc(self, url):
         print 'Request: -> rpc to dummyhost'
@@ -407,8 +412,15 @@ def ManagerRPC():
 
 
 def main():
+    '''
     process = multiprocessing.Process(target=ManagerRPC())
     process.start()
+    '''
+    print 'ManagerRPC instance'
+    s = zerorpc.Server(Manager(), pool_size=10) #numero de cpu
+    server_address = "tcp://0.0.0.0:4242"
+    s.bind(server_address)
+    s.run()
 
 if __name__ == "__main__":
     print "Start manager"

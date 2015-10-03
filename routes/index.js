@@ -9,8 +9,8 @@ router.get('/', function (req, res, next) {
     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     console.log('Client IP: ', ip);
 
-
-    res.render('index', {title: 'Express'});
+    res.redirect('/load');
+    // res.render('index', {title: 'Express'});
 });
 
 

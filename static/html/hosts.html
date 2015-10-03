@@ -62,23 +62,17 @@
                         </td>
 
                         <td class="col-md-3">
-                            <button class="btn btn-info btn-sm" ng-show="!editing[$index]" ng-click="edit($index)">edit
-                            </button>
-                            <button class="btn btn-danger btn-sm" ng-show="!editing[$index]" ng-click="remove($index)">
-                                remove</button>
-                            <button class="btn btn-warning btn-sm" ng-show="editing[$index]" ng-click="update($index)">
-                                Update</button>
-                            <button class="btn btn-primary btn-sm" ng-show="editing[$index]" ng-click="cancel($index)">
-                                Cancel</button>
-
-                            <a class="btn btn-mini" href="#/{{host._id}}" ng-show="!editing[$index]">
-                                More</a>
-
+                            <button class="btn btn-success btn-xs" ng-show="!editing[$index]" ng-click="edit($index)">edit</button>
+                            <button class="btn btn-danger btn-xs" ng-show="!editing[$index]" ng-click="remove($index)">remove</button>
+                            <button class="btn btn-warning btn-xs" ng-show="editing[$index]" ng-click="update($index)">update</button>
+                            <button class="btn btn-primary btn-xs" ng-show="editing[$index]" ng-click="cancel($index)">cancel</button>
+                            <a href="#/{{host._id}}"><button class="btn btn-xs btn-info" ng-show="!editing[$index]">more</button></a>
                         </td>
                         <td class="col-md-3">
                             <button class="btn btn-xs" ng-click="ping($index)">Ping</button>
                             <button class="btn btn-xs" ng-click="rpc($index,'setup')" title="Download BenchBox project to the dummy machine">Setup</button>
                             <button class="btn btn-xs" ng-click="rpc($index,'vagrantUp')" title="Run Vagrant up at dummy machine">Up</button>
+                            <button class="btn btn-xs" ng-click="rpc($index,'monitorUp')" title="Run Socket Listener at dummy machine, sandBox">Listen</button>
                         </td>
                     </tr>
                 </tbody>

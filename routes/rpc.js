@@ -3,19 +3,17 @@ var router = express.Router();
 var queryString = require('query-string');
 var zerorpc = require('zerorpc');
 
+var client = new zerorpc.Client({
+    timeout: 3000,  // Sets the number of seconds to wait for a response before considering the call timed out. Defaults to 30.
+    heartbeatInterval: 100000 // Sets the number of miliseconds to send send heartbeats to connected servers. Defaults to 5000ms.
+});
+client.connect('tcp://127.0.0.1:4242');
 
 
 /* GET manager rpc page. */
 router.get('/goodbye', function (req, res, next) {
-
-    var client = new zerorpc.Client({
-        timeout: 3000,  // Sets the number of seconds to wait for a response before considering the call timed out. Defaults to 30.
-        heartbeatInterval: 100000 // Sets the number of miliseconds to send send heartbeats to connected servers. Defaults to 5000ms.
-    });
-    client.connect('tcp://127.0.0.1:4242');
-
     // el servidor rep una peticio get,
-    client.invoke('goodbye', "Goodbye", function (error, resp, more) {
+    client.invoke('goodbye', "Goodbye" , function (error, resp, more) {
         if (error) {
             console.log("Error:", error)
         }
@@ -29,13 +27,6 @@ router.get('/goodbye', function (req, res, next) {
 
 /* GET manager rpc page. */
 router.get('/hello', function (req, res, next) {
-
-    var client = new zerorpc.Client({
-        timeout: 3000,  // Sets the number of seconds to wait for a response before considering the call timed out. Defaults to 30.
-        heartbeatInterval: 100000 // Sets the number of miliseconds to send send heartbeats to connected servers. Defaults to 5000ms.
-    });
-    client.connect('tcp://127.0.0.1:4242');
-
     // el servidor rep una peticio get,
 
     client.invoke('hello', "Hello", function (error, resp, more) {
@@ -52,16 +43,9 @@ router.get('/hello', function (req, res, next) {
 
 /* GET manager rpc/rpc page. */
 router.get('/rpc', function (req, res, next) {
-
-    var client = new zerorpc.Client({
-        timeout: 3000,  // Sets the number of seconds to wait for a response before considering the call timed out. Defaults to 30.
-        heartbeatInterval: 100000 // Sets the number of miliseconds to send send heartbeats to connected servers. Defaults to 5000ms.
-    });
-    client.connect('tcp://127.0.0.1:4242');
-
     // el servidor rep una peticio get,
-    console.log('RPC/RPC');
-    console.log(req.url);
+    console.log('/rpc/rpc');
+    //console.log(req.url);
     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
 
     // this is  blocking the code...
@@ -69,9 +53,11 @@ router.get('/rpc', function (req, res, next) {
         if (error) {
             console.log("Error:", error)
         }
-        console.log(resp);
-        res.json(resp)
-    });
+        // console.log(resp);
+        // res.json(resp)
+        });
+    // implementar un mecanisme de callback amb delay
+    res.json({})
 
 });
 
@@ -79,13 +65,6 @@ router.get('/rpc', function (req, res, next) {
 
 /* GET manager rpc page. */
 router.get('/start', function (req, res, next) {
-
-    var client = new zerorpc.Client({
-        timeout: 3000,  // Sets the number of seconds to wait for a response before considering the call timed out. Defaults to 30.
-        heartbeatInterval: 100000 // Sets the number of miliseconds to send send heartbeats to connected servers. Defaults to 5000ms.
-    });
-    client.connect('tcp://127.0.0.1:4242');
-
     // el servidor rep una peticio get,
 
 
@@ -93,7 +72,7 @@ router.get('/start', function (req, res, next) {
         if (error) {
             console.log("Error:", error)
         }
-        console.log(resp);
+        //console.log(resp);
 
         res.json(resp)
     });
@@ -102,19 +81,13 @@ router.get('/start', function (req, res, next) {
 
 /* GET manager rpc page. */
 router.get('/nmap', function (req, res, next) {
-
-    var client = new zerorpc.Client({
-        timeout: 3000,  // Sets the number of seconds to wait for a response before considering the call timed out. Defaults to 30.
-        heartbeatInterval: 100000 // Sets the number of miliseconds to send send heartbeats to connected servers. Defaults to 5000ms.
-    });
-    client.connect('tcp://127.0.0.1:4242');
-
     // el servidor rep una peticio get,
     //console.log(req.params)
-    console.log("COMMAND: ");
-    console.log(req.url)
+
+    //console.log(req.url)
     var cmd = req.url.split('=')[1].replace(/\+/g, ' ');
-    console.log(cmd);
+    console.log("COMMAND: "+cmd);
+    // console.log(cmd);
     //console.log(" ex: ------------->", queryString.extract(req.params));
     //console.log(" ex: ------------->", queryString.parse(req.params));
     // console.log(" parse: --> Query String", queryString.parse(location.search))
@@ -124,23 +97,15 @@ router.get('/nmap', function (req, res, next) {
             console.log("Error:", error)
         }
         console.log(resp);
-
-
-
-        res.json({result: JSON.stringify(resp)})
+        // res.json({result: JSON.stringify(resp)})
     });
+
+    res.json({result: JSON.stringify({})})
 });
 
 
 /* GET manager rpc page. */
 router.get('/list', function (req, res, next) {
-
-    var client = new zerorpc.Client({
-        timeout: 3000,  // Sets the number of seconds to wait for a response before considering the call timed out. Defaults to 30.
-        heartbeatInterval: 100000 // Sets the number of miliseconds to send send heartbeats to connected servers. Defaults to 5000ms.
-    });
-    client.connect('tcp://127.0.0.1:4242');
-
     // el servidor rep una peticio get,
 
 
@@ -149,27 +114,20 @@ router.get('/list', function (req, res, next) {
             console.log("Error:", error)
         }
         console.log(resp);
-
         res.json({result: JSON.stringify(resp)})
     });
 });
 
 /* GET manager rpc page. */
 router.get('/cmd', function (req, res, next) {
-
-    var client = new zerorpc.Client({
-        timeout: 3000,  // Sets the number of seconds to wait for a response before considering the call timed out. Defaults to 30.
-        heartbeatInterval: 100000 // Sets the number of miliseconds to send send heartbeats to connected servers. Defaults to 5000ms.
-    });
-    client.connect('tcp://127.0.0.1:4242');
-
     // el servidor rep una peticio get,
     //console.log(req.params)
-    console.log("COMMAND: ");
-    console.log(req.url);
+
+    // console.log(req.url);
     var cmd = req.url.split('=')[1].replace(/\+/g, ' ');
     // cmd = JSON.stringify(cmd);
-    console.log(cmd);
+    // console.log(cmd);
+    console.log("COMMAND: "+cmd);
     //console.log(" ex: ------------->", queryString.extract(req.params));
     //console.log(" ex: ------------->", queryString.parse(req.params));
 
