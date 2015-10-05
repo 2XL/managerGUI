@@ -295,6 +295,51 @@ class ManagerOps():
 
 
 
+    def clientStacksyncUp(self, args):
+
+        # if self.HOST_STATUS[hostname]
+        h = {
+            'ip': args['ip'][0],
+            'passwd': args['login'][0],
+            'user': args['login'][0],
+            'cred_stacksync': args['cred_stacksync'][0],
+            'cred_owncloud': args['cred_owncloud'][0],
+            'profile': args['profile'][0],
+            'stacksync-ip': args['stacksync-ip'][0],
+            'owncloud-ip': args['owncloud-ip'][0]
+        }
+        print h
+        hostname = args['hostname'][0]
+        print hostname
+        print 'tell sandBox at dummy host to start client StackSync'
+        str_cmd = '/usr/bin/stacksync'
+        self.rmisandBox(h['ip'], h['user'], h['passwd'], str_cmd)
+        # have session at the dummy host
+
+
+    def clientOwncloudUp(self, args):
+
+        # if self.HOST_STATUS[hostname]
+        h = {
+            'ip': args['ip'][0],
+            'passwd': args['login'][0],
+            'user': args['login'][0],
+            'cred_stacksync': args['cred_stacksync'][0],
+            'cred_owncloud': args['cred_owncloud'][0],
+            'profile': args['profile'][0],
+            'stacksync-ip': args['stacksync-ip'][0],
+            'owncloud-ip': args['owncloud-ip'][0]
+        }
+        print h
+        hostname = args['hostname'][0]
+        print hostname
+        print 'tell sandBox at dummy host to start client OwnCloud'
+        str_cmd = '/vagrant/owncloud.sh'
+        self.rmisandBox(h['ip'], h['user'], h['passwd'], str_cmd)
+        # have session at the dummy host
+
+
+
     def runTest(self, h, args):
         print 'run specific targeted test at a target node... how to target 2nd layer virtualization???'
         # 1st ssh to the dummy host
@@ -441,7 +486,7 @@ class Manager(object):
         result = toExecute(argslist)
         #print argslist
         #print argslist
-        print 'command {}'.format( argslist['cmd'][0])
+        print 'command {}/--->FINISH'.format( argslist['cmd'][0])
         argslist['result'] = result;
         return argslist
 

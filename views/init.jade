@@ -90,14 +90,27 @@ block content
         hr
         .row.tab-content.frame-fixed-size
             #configManager.tab-pane.fade
-                .col-md-2
-                    h4 Manager
-                .col-md-6
-                    input.bb-config.form-control#manager-ip(type='text' placeholder='manager.ip' value='localhost' )
-                .col-md-2
-                    input.bb-config.form-control#manager-port(type='text' placeholder='manager.port' value='4242' )
-                .col-md-2
-                    button.btn.btn-primary.btn-block(onclick="testConnection($('#manager-ip').val(),$('#manager-port').val())") Test Connect
+                .row
+                    .col-md-2
+                        h4 Manager
+                    .col-md-6
+                        input.bb-config.form-control#manager-ip(type='text' placeholder='manager.ip' value='localhost' )
+                    .col-md-2
+                        input.bb-config.form-control#manager-port(type='text' placeholder='manager.port' value='4242' )
+                    .col-md-2
+                        button.btn.btn-primary.btn-block(onclick="testConnection($('#manager-ip').val(),$('#manager-port').val())") Test Connect
+                .row
+                    .col-md-2
+                        h4 Install new Manager
+                    .col-md-2
+                        form(method='get' action='/manager.py')
+                            button.btn.btn-info.btn-block(type='submit') Download!
+                    .col-md-2
+                        input.form-control(type='text' value='run: python manager.py')
+                    .col-md-2
+                        input.form-control(type='text' value='stop: CTRL + C')
+                    .col-md-4
+                        button.btn.btn-warning.btn-block AutoRun!
 
             #configSyncServer.tab-pane.fade
                 .row
@@ -286,7 +299,7 @@ block content
                     .controller('HostController', ['$scope', 'Hosts', function ($scope, Hosts) {
                         // controller actions
                         $scope.editing = []; //  variable
-
+                        $scope.checkedAll = false;
                         // Invocar manager de hosts
                         $scope.hosts = Hosts.query(); // llistat de tots els hosts
 
@@ -345,7 +358,14 @@ block content
                              */
                         };
 
+                        $scope.checkAll = function (name) {
 
+                            $scope.checkedAll = !$scope.checkedAll;
+                            // console.log($scope.checkedAll );
+                            $('.' + name).each(function () {
+                                $(this).prop('checked', $scope.checkedAll);
+                            });
+                        };
 
 
                         $scope.edit = function (index) {
@@ -499,7 +519,7 @@ block content
                     error: function (err) {
                         console.log(err)
                         console.log('pc, Error ping(' + ip + ':' + port + ')', err);
-                        $.notify('Error! '+err, 'error ');
+                        $.notify('Error! ' + err, 'error ');
                     }
                 });
             };
@@ -532,8 +552,8 @@ block content
                     },
                     error: function (err) {
                         console.log(err)
-                        console.log('pc, Error '+host+' '+cmd+' ', err);
-                        $.notify('Error! '+err, 'error');
+                        console.log('pc, Error ' + host + ' ' + cmd + ' ', err);
+                        $.notify('Error! ' + err, 'error');
                     }
                 });
             };
@@ -549,19 +569,19 @@ block content
 
             appendAllHosts = function (target, className) {
                 target.hosts = {};
-                $('.'+className).each(function () {
+                $('.' + className).each(function () {
 
                     target.hosts[$(this).find('p.host-name').text()] = {
-                        ip :$(this).find('p.host-ip').text(),
+                        ip: $(this).find('p.host-ip').text(),
                         login: $(this).find('p.host-login').text()
 
                     };
                 // $(this).find('p.host-name');
 
-                console.log(target.hosts);
+                    console.log(target.hosts);
                 });
 
-                GLOBAL_VAR =target;
+                GLOBAL_VAR = target;
             };
 
 
