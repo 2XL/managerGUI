@@ -312,7 +312,7 @@ class ManagerOps():
         hostname = args['hostname'][0]
         print hostname
         print 'tell sandBox at dummy host to start client StackSync'
-        str_cmd = '/usr/bin/stacksync'
+        str_cmd = 'nohup /usr/bin/stacksync &'
         self.rmisandBox(h['ip'], h['user'], h['passwd'], str_cmd)
         # have session at the dummy host
 
@@ -334,7 +334,7 @@ class ManagerOps():
         hostname = args['hostname'][0]
         print hostname
         print 'tell sandBox at dummy host to start client OwnCloud'
-        str_cmd = '/vagrant/owncloud.sh'
+        str_cmd = 'nohup /vagrant/owncloud.sh &'
         self.rmisandBox(h['ip'], h['user'], h['passwd'], str_cmd)
         # have session at the dummy host
 
@@ -389,7 +389,7 @@ class ManagerOps():
         sandboxPass = 'vagrant'
 
         str_cmd = " " \
-                  "sshpass -p {} ssh {}@{} {}" \
+                  'sshpass -p {} ssh -f -n  {}@{} "{}"' \
                   " ".format(sandboxPass,  sandboxUser, sandboxIP, cmd)
         print str_cmd
         self.rmi(hostname, login, passwd, str_cmd)
@@ -401,7 +401,7 @@ class ManagerOps():
         benchboxPass = 'vagrant'
 
         str_cmd = " " \
-                  "sshpass -p {} ssh {}@{} {}" \
+                  'sshpass -p {} ssh -f -n {}@{} "{}"' \
                   " ".format(benchboxPass,  benchboxUser, benchboxIP, cmd)
         print str_cmd
         self.rmi(hostname, login, passwd, str_cmd)

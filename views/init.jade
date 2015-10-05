@@ -297,6 +297,17 @@ block content
 
                 // hosts.html
                     .controller('HostController', ['$scope', 'Hosts', function ($scope, Hosts) {
+                        // default test settings
+                        $scope.run = {
+                            testOps: 10,
+                            testItv: 1,
+                            testProfile: 'sync',
+                            testFolder: 'stacksync_folder',
+                            testClient: 'StackSync'
+                        };
+
+
+
                         // controller actions
                         $scope.editing = []; //  variable
                         $scope.checkedAll = false;
@@ -363,10 +374,30 @@ block content
                             $scope.checkedAll = !$scope.checkedAll;
                             // console.log($scope.checkedAll );
                             $('.' + name).each(function () {
-                                $(this).prop('checked', $scope.checkedAll);
+                                console.log(this);
+                                // (this).prop('checked', $scope.checkedAll);
+                                if($(this).prop('checked') !== $scope.checkedAll)
+                                    $(this).trigger('click');
+
                             });
                         };
 
+                        $scope.runTest = function () {
+                            console.log($scope.hosts.length);
+
+
+                            var test = $scope.run;
+
+                            var hosts = $scope.hosts.filter(function (item) {
+                                console.log(item);
+                                if (item.test)
+                                    return item;
+                            });
+                            console.log(hosts.length);
+                            console.log('Hosts!!!');
+                            rpcTest(hosts, test);
+
+                        };
 
                         $scope.edit = function (index) {
                             $scope.editing[index] = angular.copy($scope.hosts[index]);
@@ -559,7 +590,11 @@ block content
             };
 
 
-
+            rpcTest = function (hosts, test, cb) {
+                console.log("RunTests ");
+                console.log("Hosts: ", hosts);
+                console.log("Test: ", test);
+            };
 
             appendAllParams = function (target, className) {
                 $('.' + className).each(function () {
