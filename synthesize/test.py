@@ -6,20 +6,22 @@ import urllib2
 import json
 
 class GraphiteClient():
-    def __init__(self, host='localhost', port='22003'):
+    def __init__(self, host='localhost', portstr='22003', portpickle='22004'):
         self.hostname = host
-        self.port = port
+        self.portstr = portstr
+        self.portpickle = portpickle
 
-    def collect_string(self, name, val, timestamp):
+    def collect_string(self, name, value, timestamp):
         sock = socket.socket()
-        sock.connect((self.hostname, self.port))
-        sock.send("%s %d %d\n" % (name, val, timestamp))
+        sock.connect((self.hostname, self.portstr))
+        sock.send("%s %d %d\n" % (name, value, timestamp))
+
         sock.close()
 
-    def collect_pickle(self, name, val, timestamp):
+    def collect_pickle(self, name, value, timestamp):
         sock = socket.socket()
-        sock.connect((self.hostname, 2004))
-        sock.send("%s %d %d\n" % (name, val, timestamp))
+        sock.connect((self.hostname, self.portpickle))
+        sock.send("%s %d %d\n" % (name, value, timestamp))
         sock.close()
 
 
@@ -43,11 +45,11 @@ if __name__ == "__main__":
     value = None
 
     ops = 10
-    itv = 1
+    itv = 10
 
 
     metric = '{}.{}.{}'.format(hostname, test_id, key)
-
+    print metric
     for x in range(0, ops, 1):
         gc.collect_string(metric, randValue(), tsNow())
         time.sleep(itv)
@@ -59,7 +61,8 @@ if __name__ == "__main__":
     print data
 
 
-
+    # http://serverfault.com/questions/593157/graphite-shows-none-for-all-data-points-even-though-i-send-it-data
+    # http://stackoverflow.com/questions/17045549/graphite-render-precision-lower-than-1-minute
     '''
     CARBON_SERVER = 'ast03'
     CARBON_PORT = 22003
