@@ -384,8 +384,6 @@ block content
 
                         $scope.runTest = function () {
                             console.log($scope.hosts.length);
-
-
                             var test = $scope.run;
 
                             var hosts = $scope.hosts.filter(function (item) {
@@ -594,6 +592,58 @@ block content
                 console.log("RunTests ");
                 console.log("Hosts: ", hosts);
                 console.log("Test: ", test);
+
+
+
+
+
+                hosts.forEach(function(host){
+
+                    console.log(host);
+                    console.log('->');
+                    console.log(test);
+
+                    var cmd = 'test';
+
+                    var args = {
+                        ip: host.ip,
+                        hostname: host.hostname,
+                        login: host.logging,
+                        profile: host.profile,
+                        cred_stacksync: host.cred_stacksync,
+                        cred_owncloud: host.cred_owncloud,
+                        cmd: 'test',
+                        test: test
+                    };
+
+                    $.ajax({
+                        url: 'http://localhost:3000/rpc/rpc',
+                        data: args,
+                        timeout: 6000000, // 6000s ::100min
+                        type: 'GET',
+                        success: function (data) {
+                            console.log("Success, run test! "+(test));
+                            console.log(JSON.stringify(data));
+                            $.notify('Success! ' + host.hostname + ' ' + cmd, 'success');
+                        },
+                        error: function (err) {
+                            console.log(err)
+                            console.log('pc, Error ' + host + ' ' + cmd + ' ', err);
+                            $.notify('Error! ' + err, 'error');
+                        }
+                    });
+
+
+
+                    './executor.py -o 20 -p sync -t 1 -f stacksync_folder -x StackSync'
+
+                });
+
+
+
+
+
+
             };
 
             appendAllParams = function (target, className) {

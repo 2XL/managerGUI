@@ -28,7 +28,6 @@ import getpass
 
 # importar el init.py
 class ManagerOps():
-
     # hosts
     # credentials
     # config
@@ -64,14 +63,43 @@ class ManagerOps():
         else:
             print 'have {}'.format(hostname)
 
-        self.t1downloadBenchBox(h,hostname)
-        self.t2installVagrantVBox(h,hostname)
+        self.t1downloadBenchBox(h, hostname)
+        self.t2installVagrantVBox(h, hostname)
         self.t3downloadVagrantBoxImg(h, hostname)
         self.t4assignStereoTypeToProfile(h, hostname)
         self.t5assignCredentialsToProfile(h, hostname)
         self.t6assignSyncServer(h, hostname)
 
         return self.HOST_STATUS[hostname]
+
+    def test(self, args):
+        print 'Test args'
+        print args
+        # if self.HOST_STATUS[hostname]
+
+        h = {
+            'ip': args['ip'][0],
+            'passwd': args['login'][0],
+            'user': args['login'][0],
+            'profile': args['profile'][0],
+        }
+
+        # todo choose profile priority default or Execute arguments
+        test = {
+            'folder': args['test[testFolder]'][0],
+            'profile': args['test[testProfile]'][0],
+            'operations': args['test[testOps]'][0],
+            'client': args['test[testClient]'][0],
+            'interval': args['test[testItv]'][0],
+        }
+
+
+        print test
+        print 'tell benchBox at dummy host to run Test'
+        # str_cmd = './monitor/startMonitor.sh'
+        str_cmd = 'cd /home/vagrant/simulator && ./executor.py -o {} -p {} -t {} -f {} -x {}'.format(test['operations'], test['profile'], test['interval'], test['folder'], test['client'])
+        print str_cmd
+        self.rmibenchBox(h['ip'], h['user'], h['passwd'], str_cmd)
 
     def t1downloadBenchBox(self, h, hostname):  # tell all the hosts to download BenchBox
         if self.HOST_STATUS[hostname].has_key('t1downloadBenchBox'):
@@ -90,7 +118,7 @@ class ManagerOps():
                   "" % h['passwd']
         # print str_cmd
 
-        self.rmi(h['ip'], h['user'], h['passwd'], str_cmd) # utilitzar un worker del pool
+        self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)  # utilitzar un worker del pool
         self.HOST_STATUS[hostname]['t1downloadBenchBox'] = True
         '''
         versió pool
@@ -98,7 +126,7 @@ class ManagerOps():
         print 't1downloadBenchBox/OK: {}'.format(hostname)
 
 
-    def t2installVagrantVBox(self, h, hostname):    # tell all the hosts to install VirtualBox and Vagrant
+    def t2installVagrantVBox(self, h, hostname):  # tell all the hosts to install VirtualBox and Vagrant
         if self.HOST_STATUS[hostname].has_key('t2installVagrantVBox'):
             print 'HAS true'
             return True
@@ -130,14 +158,14 @@ class ManagerOps():
                   "./installDependencies.sh; " \
                   "fi;" \
                   ""
-        #print str_cmd
+        # print str_cmd
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
         self.HOST_STATUS[hostname]['t3downloadVagrantBoxImg'] = True
         print 't3downloadVagrantBoxImg/OK: {}'.format(hostname)
 
 
     def t4assignStereoTypeToProfile(self, h, hostname):
-        #if self.HOST_STATUS[hostname].has_key('t4assignStereoTypeToProfile'):
+        # if self.HOST_STATUS[hostname].has_key('t4assignStereoTypeToProfile'):
         #    print 'HAS true'
         #    return True
         print 't4assignStereoTypeToProfile'
@@ -155,9 +183,8 @@ class ManagerOps():
         print 't4assignStereoTypeToProfile/OK: {} :: {}'.format(hostname, h['profile'])
 
 
-
     def t5assignCredentialsToProfile(self, h, hostname):
-        #if self.HOST_STATUS[hostname].has_key('t5assignCredentialsToProfile'):
+        # if self.HOST_STATUS[hostname].has_key('t5assignCredentialsToProfile'):
         #    print 'HAS true'
         #    return True
         print 't5assignCredentialsToProfile'
@@ -174,7 +201,7 @@ class ManagerOps():
                   "./config.owncloud.sh; " \
                   "./config.stacksync.sh; " \
                   "echo 'clients configuration files generated'; " \
-                  "fi; " % (h['cred_stacksync'],h['cred_owncloud'], hostname)
+                  "fi; " % (h['cred_stacksync'], h['cred_owncloud'], hostname)
         # print str_cmd
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
         self.HOST_STATUS[hostname]['t5assignCredentialsToProfile'] = True
@@ -182,7 +209,7 @@ class ManagerOps():
 
 
     def t6assignSyncServer(self, h, hostname):
-        #if self.HOST_STATUS[hostname].has_key('t6assignSyncServer'):
+        # if self.HOST_STATUS[hostname].has_key('t6assignSyncServer'):
         #    print 'HAS true'
         #    return True
         print 't6assignSyncServer'
@@ -202,7 +229,6 @@ class ManagerOps():
         self.rmi(h['ip'], h['user'], h['passwd'], str_cmd)
         self.HOST_STATUS[hostname]['t6assignSyncServer'] = True
         print 't6assignSyncServer/OK {} '.format(hostname)
-
 
 
     def vagrantUp(self, args):
@@ -232,7 +258,7 @@ class ManagerOps():
                 if (self.HOST_STATUS[hostname][s]):
                     continue
                 else:
-                    self.HOST_RUN_STATUS[hostname] = 'host setup error'; # use run code...
+                    self.HOST_RUN_STATUS[hostname] = 'host setup error';  # use run code...
                     break
         else:
             self.HOST_RUN_STATUS[hostname] = 'host not setup {}'.format(len(self.HOST_STATUS[hostname]));
@@ -293,8 +319,6 @@ class ManagerOps():
         # have session at the dummy host
 
 
-
-
     def clientStacksyncUp(self, args):
 
         # if self.HOST_STATUS[hostname]
@@ -339,13 +363,11 @@ class ManagerOps():
         # have session at the dummy host
 
 
-
     def runTest(self, h, args):
         print 'run specific targeted test at a target node... how to target 2nd layer virtualization???'
         # 1st ssh to the dummy host
         # 2nd have a script at dummy to relay the execution...
         # otherwise how???
-
 
 
     def start_node_server(self, h):
@@ -357,19 +379,17 @@ class ManagerOps():
         print 'nodeserver running at {}:{}'.format(h['ip'], '5000')
 
 
-
-
     def rmi(self, hostname, login, passwd, cmd, callback=None):
         while True:
             try:
                 print 'try'
-                options={"StrictHostKeyChecking": "no", "UserKnownHostsFile": "/dev/null", "timeout": "3600"}
+                options = {"StrictHostKeyChecking": "no", "UserKnownHostsFile": "/dev/null", "timeout": "3600"}
                 s = pxssh.pxssh()
                 s.login(hostname, login, passwd)
-                s.timeout = 3600 # set timeout to one hour
-                s.sendline(cmd) # run a command
-                s.prompt() # match the prompt
-                #print s.before # print everyting before the prompt
+                s.timeout = 3600  # set timeout to one hour
+                s.sendline(cmd)  # run a command
+                s.prompt()  # match the prompt
+                # print s.before # print everyting before the prompt
                 # s.sendline ('uptime;df -h') # running multiple lines
                 s.logout()
             except pxssh.ExceptionPxssh, e:
@@ -390,7 +410,7 @@ class ManagerOps():
 
         str_cmd = " " \
                   'sshpass -p {} ssh -f -n  {}@{} "{}"' \
-                  " ".format(sandboxPass,  sandboxUser, sandboxIP, cmd)
+                  " ".format(sandboxPass, sandboxUser, sandboxIP, cmd)
         print str_cmd
         self.rmi(hostname, login, passwd, str_cmd)
 
@@ -402,17 +422,16 @@ class ManagerOps():
 
         str_cmd = " " \
                   'sshpass -p {} ssh -f -n {}@{} "{}"' \
-                  " ".format(benchboxPass,  benchboxUser, benchboxIP, cmd)
+                  " ".format(benchboxPass, benchboxUser, benchboxIP, cmd)
         print str_cmd
         self.rmi(hostname, login, passwd, str_cmd)
+
 
 # this is the manager server
 
 class Manager(object):
-
     hosts = None
     config = None
-
 
     ops = ManagerOps()
 
@@ -421,7 +440,6 @@ class Manager(object):
 
     def loadConfig(self):
         print 'loadConfig'
-
 
 
     def hello(self, name):
@@ -441,8 +459,8 @@ class Manager(object):
         print name
         print str
         print 'Request: -> cmd {}'.format(name)
-        bashCommand = name # "{}".format(name)
-        output = subprocess.check_output(['bash','-c', urllib.unquote_plus(bashCommand)])
+        bashCommand = name  # "{}".format(name)
+        output = subprocess.check_output(['bash', '-c', urllib.unquote_plus(bashCommand)])
         # json.dumps("Response: -> client: List from manager " % name),
         return output.split('\n')
 
@@ -450,7 +468,7 @@ class Manager(object):
     def list(self, name):
         print 'Request: -> list {}'.format(name)
         bashCommand = "ls {}".format(name)
-        output = subprocess.check_output(['bash','-c', bashCommand])
+        output = subprocess.check_output(['bash', '-c', bashCommand])
         # json.dumps("Response: -> client: List from manager " % name),
         return output.split('\n')
 
@@ -459,12 +477,12 @@ class Manager(object):
 
     def nmap(self, port, ip):
         print 'Request: -> ping {}:{}'.format(ip, port)
-        output = subprocess.check_output(['nmap','-p', port, ip])
+        output = subprocess.check_output(['nmap', '-p', port, ip])
 
         result = output.split('\n')
         print result
         if len(result) > 5:
-            #print result[5]
+            # print result[5]
             #print result[5].split()[1]
             # print result[5].split(' ', 1)
             if result[5].split()[1] == 'open':
@@ -476,7 +494,7 @@ class Manager(object):
 
     def rpc(self, url):
         print 'Request: -> rpc to dummyhost'
-        #print url # full url
+        # print url # full url
 
         str = urlparse.urlparse(url)
         #print str
@@ -486,13 +504,14 @@ class Manager(object):
         result = toExecute(argslist)
         #print argslist
         #print argslist
-        print 'command {}/--->FINISH'.format( argslist['cmd'][0])
+        print 'command {}/--->FINISH'.format(argslist['cmd'][0])
         argslist['result'] = result;
         return argslist
 
+
 def ManagerRPC():
     print 'ManagerRPC instance'
-    s = zerorpc.Server(Manager(), pool_size=4) #numero de cpu
+    s = zerorpc.Server(Manager(), pool_size=4)  # numero de cpu
     server_address = "tcp://0.0.0.0:4242"
     s.bind(server_address)
     s.run()
@@ -504,10 +523,11 @@ def main():
     process.start()
     '''
     print 'ManagerRPC instance'
-    s = zerorpc.Server(Manager(), pool_size=10) #numero de cpu
+    s = zerorpc.Server(Manager(), pool_size=10)  # numero de cpu
     server_address = "tcp://0.0.0.0:4242"
     s.bind(server_address)
     s.run()
+
 
 if __name__ == "__main__":
     print "Start manager"
