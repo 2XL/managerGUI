@@ -77,11 +77,11 @@ block content
                         a(data-toggle='pill' href='#configSyncServer') SyncServer
                     li
                         a(data-toggle='pill' href='#configLogServer') LogServer
-                    li.active
+                    li
                         a(data-toggle='pill' href='#configHosts') Hosts
                     li
                         a(data-toggle='pill' href='#configProfile') Profile
-                    li
+                    li.active
                         a(data-toggle='pill' href='#configMonitor') Monitor
                     li
                         a(data-toggle='pill' href='#configConsole') Console
@@ -90,18 +90,19 @@ block content
         hr
         .row.tab-content.frame-fixed-size
             #configManager.tab-pane.fade
-                .row
+
+                .row.col-md-12
                     .col-md-2
-                        h4 Manager
+                        p Manager
                     .col-md-6
                         input.bb-config.form-control#manager-ip(type='text' placeholder='manager.ip' value='localhost' )
                     .col-md-2
                         input.bb-config.form-control#manager-port(type='text' placeholder='manager.port' value='4242' )
                     .col-md-2
                         button.btn.btn-primary.btn-block(onclick="testConnection($('#manager-ip').val(),$('#manager-port').val())") Test Connect
-                .row
+                .row.col-md-12
                     .col-md-2
-                        h4 Install new Manager
+                        p Install new Manager
                     .col-md-2
                         form(method='get' action='/manager.py')
                             button.btn.btn-info.btn-block(type='submit') Download!
@@ -113,18 +114,18 @@ block content
                         button.btn.btn-warning.btn-block AutoRun!
 
             #configSyncServer.tab-pane.fade
-                .row
+                .row.col-md-12
                     .col-md-2
-                        h4 SyncServer
+                        p StackSyncServer
                     .col-md-4
                         input.bb-config.form-control#stacksync-ip(type='text' placeholder='ss.stacksync.ip' value='#{session.config.ss.stacksync.ip}')
                     .col-md-4
                         input.bb-config.form-control#stacksync-port(type='text' placeholder='ss.stacksync.port' value='#{session.config.ss.stacksync.port}')
                     .col-md-2
                         button.btn.btn-primary.btn-block(onclick="testConnection($('#stacksync-ip').val(),$('#stacksync-port').val())") Test Connect
-                .row
+                .row.col-md-12
                     .col-md-2
-                        h4 LogServer
+                        p OwnCloudServer
                     .col-md-4
                         input.bb-config.form-control#owncloud-ip(type='text' placeholder='ss.owncloud.ip' value='#{session.config.ss.owncloud.ip}')
                     .col-md-4
@@ -133,7 +134,7 @@ block content
                         button.btn.btn-primary.btn-block(onclick="testConnection($('#owncloud-ip').val(),$('#owncloud-port').val())") Test Connect
 
             #configLogServer.tab-pane.fade
-                .row
+                .row.col-md-12
                     .col-md-2
                         p Graphite
                     .col-md-4
@@ -142,9 +143,18 @@ block content
                         input.bb-config.form-control#graphite-port(type='text' placeholder='ls.graphite.port' value='#{session.config.ls.graphite.port}')
                     .col-md-2
                         button.btn.btn-primary.btn-block(onclick="testConnection($('#graphite-ip').val(),$('#graphite-port').val())") Test Connect
+                .row.col-md-12
+                    .col-md-2
+                        p Impala
+                    .col-md-4
+                        input.bb-config.form-control#impala-ip(type='text' placeholder='ls.impala.ip' value='#{session.config.ls.impala.ip}')
+                    .col-md-4
+                        input.bb-config.form-control#impala-port(type='text' placeholder='ls.impala.port' value='#{session.config.ls.impala.port}')
+                    .col-md-2
+                        button.btn.btn-primary.btn-block(onclick="testConnection($('#impala-ip').val(),$('#impala-port').val())") Test Connect
 
 
-            #configMonitor.tab-pane.fade
+            #configMonitor.tab-pane.fade.in.active
                 .col-md-2
                     h4 Monitor
                 .col-md-10
@@ -164,15 +174,28 @@ block content
                         .col-md-10
                             ul.nav.nav-pills
                                 li.active
+                                    a(data-toggle='pill' href='#graphXXX') XXX
+                                li
                                     a(data-toggle='pill' href='#graphCPU') CPU
                                 li
                                     a(data-toggle='pill' href='#graphRAM') RAM
                                 li
                                     a(data-toggle='pill' href='#graphNET') NET
+                                li
+                                    a(data-toggle='pill' href='#graphNET') Cubism
+                                    // http://square.github.io/cubism/
+                                li
+                                    a(data-toggle='pill' href='#graphNET') Giraphe
+                                    // https://github.com/kenhub/giraffe
+                                    // http://xor.lonnen.com/graphite.js/
 
                             hr
                             .row.tab-content
-                                #graphCPU.tab-pane.fade.in.active
+                                #graphXXX.tab-pane.fade.in.active
+                                    .col-md-12
+                                        img.img-responsive.center-block#monitorXXX(alt='xxxMonitor')
+
+                                #graphCPU.tab-pane.fade
                                     .col-md-12
                                         img.img-responsive.center-block#monitorCPU(alt='cpuMonitor')
                                     // (src='https://ast03:8443/render/?width=586&height=308&target=carbon.agents.vagrant-ubuntu-trusty-64-1.cpuUsage')
@@ -186,10 +209,12 @@ block content
                                     .col-md-12
                                         img.img-responsive.center-block#monitorNET(alt='netMonitor')
                                     //(src='https://ast03:8443/render/?width=586&height=308&target=carbon.agents.vagrant-ubuntu-trusty-64-1.pointsPerUpdate&target=carbon.agents.vagrant-ubuntu-trusty-64-1.updateOperations')
+                            hr
+                            .row.tab-content
+                                #btnFixImage.btn.btn-danger Fix Image https 501 Error.
 
 
-
-            #configHosts.tab-pane.fade.in.active
+            #configHosts.tab-pane.fade
                 .col-md-12
                     div(ng-app="app")
                         ng-view
@@ -392,6 +417,10 @@ block content
                                     return item;
                             });
                             console.log(hosts.length);
+                            if(hosts.length === 0)
+                                $.notify('Warning!, No host checked', 'warn');
+                            else
+                                $.notify('Request rpcTest forwarded!', 'info');
                             console.log('Hosts!!!');
                             rpcTest(hosts, test);
 
@@ -679,33 +708,68 @@ block content
             $.fn.graphite.defaults.width = "450";
             $.fn.graphite.defaults.height = "300";
 
-            $('#monitorCPU').graphite({
+            try {
+                $('#monitorCPU').graphite({
                // url: "http://myserver/render/",
-                from: "-1hours",
-                target: [
-                    "carbon.agents.vagrant-ubuntu-trusty-64-1.cpuUsage"
-                ],
-                title: "CPUMonitor"
-            });
+                    from: "-1d",
+                    target: [
+                        "carbon.agents.vagrant-ubuntu-trusty-64-1.memUsage"
+                    ],
+                    title: "CPUMonitor"
+                });
+                $('#monitorXXX').graphite({
+               // url: "http://myserver/render/",
+                    from: "-1hours",
+                    target: [
+                        "carbon.agents.vagrant-ubuntu-trusty-64-1.cpuUsage"
+                    ],
+                    title: "XXXMonitor"
+                });
 
-            $('#monitorRAM').graphite({
-               // url: "http://myserver/render/",
-                from: "-1hours",
-                target: [
-                    "carbon.agents.vagrant-ubuntu-trusty-64-1.memUsage"
-                ],
-                title: "RamMonitor"
-            });
 
-            $('#monitorNET').graphite({
+                $('#monitorRAM').graphite({
                // url: "http://myserver/render/",
-                from: "-1hours",
-                colorList: 'red,green',
-                target: [
-                    "alias(carbon.agents.vagrant-ubuntu-trusty-64-1.pointsPerUpdate, 'pointsPerUpdate')",
-                    "alias(carbon.agents.vagrant-ubuntu-trusty-64-1.updateOperations, 'updateOps')"
-                ],
-                title: "NetworkMonitor"
+                    from: "-1hours",
+                    target: [
+                        "carbon.agents.vagrant-ubuntu-trusty-64-1.memUsage"
+                    ],
+                    title: "RamMonitor"
+                });
+
+                $('#monitorNET').graphite({
+               // url: "http://myserver/render/",
+                    from: "-1hours",
+                    colorList: 'red,green',
+                    target: [
+                        "alias(carbon.agents.vagrant-ubuntu-trusty-64-1.pointsPerUpdate, 'pointsPerUpdate')",
+                        "alias(carbon.agents.vagrant-ubuntu-trusty-64-1.updateOperations, 'updateOps')"
+                    ],
+                    title: "NetworkMonitor"
+                });
+            } catch (err) {
+                console.warn('Error happened', JSON.stringify(err));
+            }
+
+            $('#btnFixImage').click( function(){
+                console.log("btnFixImage")
+                function openNewBackgroundTab(url) {
+                    var a = document.createElement("a");
+                    a.href = url;
+                    var evt = document.createEvent("MouseEvents");
+
+                    //the tenth parameter of initMouseEvent sets ctrl key
+                    evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0,
+                            true, false, false, false, 0, null);
+                    a.dispatchEvent(evt);
+                }
+
+                var url = prompt("Please enter graphite: [ip:port]", "10.30.103.95:8443");
+                if (url != null) {
+                    console.log('Dispatch openNewWindow')
+                    openNewBackgroundTab('https://'+url+'/renderer/?from=-1d&height=300&until=now&width=450&target=carbon.agents.vagrant-ubuntu-trusty-64-1.memUsage&title=CPUMonitor&_t=0.013591398485004902');
+                    // alert('Accept certificate and refresh page!')
+                }
+
             });
 
 

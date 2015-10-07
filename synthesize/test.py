@@ -14,7 +14,7 @@ class GraphiteClient():
     def collect_string(self, name, value, timestamp):
         sock = socket.socket()
         sock.connect((self.hostname, self.portstr))
-        sock.send("%s %d %d\n" % (name, value, timestamp))
+        sock.send("%s %s %d\n" % (name, value, timestamp))
 
         sock.close()
 
@@ -28,6 +28,8 @@ class GraphiteClient():
 def tsNow():
     return int(time.time())
 
+def strDate():
+    return time.strftime("%H:%M:%S")
 
 def randValue():
     return random.randint(0, 100)
@@ -39,16 +41,17 @@ if __name__ == "__main__":
     graphitePort = 22003
     gc = GraphiteClient(graphiteUrl, graphitePort)
 
-    hostname = 'Joanna'
-    test_id = tsNow()
+    benchbox = 'benchbox'
+    hostname = 'ast'
+    test_id = 'anna' # tsNow()
     key = 'random'
     value = None
 
-    ops = 10
-    itv = 10
+    ops = 120
+    itv = 1
 
 
-    metric = '{}.{}.{}'.format(hostname, test_id, key)
+    metric = '{}.{}.{}.{}'.format(benchbox, hostname, test_id, key)
     print metric
     for x in range(0, ops, 1):
         gc.collect_string(metric, randValue(), tsNow())
@@ -63,6 +66,15 @@ if __name__ == "__main__":
 
     # http://serverfault.com/questions/593157/graphite-shows-none-for-all-data-points-even-though-i-send-it-data
     # http://stackoverflow.com/questions/17045549/graphite-render-precision-lower-than-1-minute
+    # https://ast03:8443/render?target=Joanna.*.random&format=json
+    # http://mirabedini.com/blog/?p=517
+    # - edit
+    # /opt/graphite/conf/storage-schemas.conf
+    # - update
+    # alt1 -> remove available logs -> rm /opt/graphite/storage/whisper
+    # alt2 -> resize available logs -> whisper-resize.py
+    # - submit
+    # service carbon-cache restart
     '''
     CARBON_SERVER = 'ast03'
     CARBON_PORT = 22003
