@@ -12,7 +12,7 @@ block css
     link(rel='stylesheet', href='css/bootstrap-table.css')
 
     // graphene
-    link(rel='stylesheet', href='css/graphene.min.css')
+    // link(rel='stylesheet', href='css/graphene.min.css')
 
 
 
@@ -34,7 +34,10 @@ block js
 
     // GRAPHITE
     script(src='js/jquery.graphite.js')
-    script(src='js/graphene.min.js')
+    //script(src='js/d3.js')
+    //script(src='js/backbone.js')
+    //script(src='js/underscore.js')
+    // script(src='js/graphene.min.js')
 
     // CUSTOM
     script(src='js/init.js')
@@ -197,7 +200,12 @@ block content
                             .row.tab-content
                                 #graphXXX.tab-pane.fade.in.active
                                     .col-md-12
-                                        img.img-responsive.center-block#monitorXXX(alt='xxxMonitor')
+                                        // img.img-responsive.center-block#monitorXXX(alt='xxxMonitor')
+
+                                        script(type='text/javascript').
+                                            console.log('Testing graphene')
+
+
 
                                 #graphCPU.tab-pane.fade
                                     .col-md-12
@@ -405,7 +413,7 @@ block content
                             $('.' + name).each(function () {
                                 console.log(this);
                                 // (this).prop('checked', $scope.checkedAll);
-                                if($(this).prop('checked') !== $scope.checkedAll)
+                                if ($(this).prop('checked') !== $scope.checkedAll)
                                     $(this).trigger('click');
 
                             });
@@ -421,7 +429,7 @@ block content
                                     return item;
                             });
                             console.log(hosts.length);
-                            if(hosts.length === 0)
+                            if (hosts.length === 0)
                                 $.notify('Warning!, No host checked', 'warn');
                             else
                                 $.notify('Request rpcTest forwarded!', 'info');
@@ -627,10 +635,7 @@ block content
                 console.log("Test: ", test);
 
 
-
-
-
-                hosts.forEach(function(host){
+                hosts.forEach(function (host) {
 
                     console.log(host);
                     console.log('->');
@@ -655,7 +660,7 @@ block content
                         timeout: 6000000, // 6000s ::100min
                         type: 'GET',
                         success: function (data) {
-                            console.log("Success, run test! "+(test));
+                            console.log("Success, run test! " + (test));
                             console.log(JSON.stringify(data));
                             $.notify('Success! ' + host.hostname + ' ' + cmd, 'success');
                         },
@@ -667,14 +672,9 @@ block content
                     });
 
 
-
                     './executor.py -o 20 -p sync -t 1 -f stacksync_folder -x StackSync'
 
                 });
-
-
-
-
 
 
             };
@@ -754,7 +754,7 @@ block content
                 console.warn('Error happened', JSON.stringify(err));
             }
 
-            $('#btnFixImage').click( function(){
+            $('#btnFixImage').click(function () {
                 console.log("btnFixImage")
                 function openNewBackgroundTab(url) {
                     var a = document.createElement("a");
@@ -770,7 +770,7 @@ block content
                 var url = prompt("Please enter graphite: [ip:port]", "10.30.103.95:8443");
                 if (url != null) {
                     console.log('Dispatch openNewWindow')
-                    openNewBackgroundTab('https://'+url+'/renderer/?from=-1d&height=300&until=now&width=450&target=carbon.agents.vagrant-ubuntu-trusty-64-1.memUsage&title=CPUMonitor&_t=0.013591398485004902');
+                    openNewBackgroundTab('https://' + url + '/renderer/?from=-1d&height=300&until=now&width=450&target=carbon.agents.vagrant-ubuntu-trusty-64-1.memUsage&title=CPUMonitor&_t=0.013591398485004902');
                     // alert('Accept certificate and refresh page!')
                 }
 
