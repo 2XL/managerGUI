@@ -409,7 +409,7 @@ class ManagerOps():
         sandboxPass = 'vagrant'
 
         str_cmd = " " \
-                  'sshpass -p {} ssh -f -n  {}@{} "{}"' \
+                  'sshpass -p {} ssh -f -n -o StrictHostKeyChecking=no {}@{} "{}"' \
                   " ".format(sandboxPass, sandboxUser, sandboxIP, cmd)
         print str_cmd
         self.rmi(hostname, login, passwd, str_cmd)
@@ -421,7 +421,7 @@ class ManagerOps():
         benchboxPass = 'vagrant'
 
         str_cmd = " " \
-                  'sshpass -p {} ssh -f -n {}@{} "{}"' \
+                  'sshpass -p {} ssh -f -n -o StrictHostKeyChecking=no {}@{} "{}"' \
                   " ".format(benchboxPass, benchboxUser, benchboxIP, cmd)
         print str_cmd
         self.rmi(hostname, login, passwd, str_cmd)
