@@ -10,7 +10,11 @@ router.get('/', function(req, res, next) {
 
     Host.find(function(err, hosts){
         if (err) return next(err);
-        res.json(hosts);
+
+        console.log('found!');
+        // sort corresponds to the order by func
+        res.json(hosts.sort({hostname: 0, user: 0}));
+        //res.json(hosts);
     });
     // res.send('respond with a resource');
 });

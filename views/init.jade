@@ -84,11 +84,11 @@ block content
                         a(data-toggle='pill' href='#configSyncServer') SyncServer
                     li
                         a(data-toggle='pill' href='#configLogServer') LogServer
-                    li
+                    li.active
                         a(data-toggle='pill' href='#configHosts') Hosts
                     li
                         a(data-toggle='pill' href='#configProfile') Profile
-                    li.active
+                    li
                         a(data-toggle='pill' href='#configMonitor') Monitor
                     li
                         a(data-toggle='pill' href='#configConsole') Console
@@ -161,7 +161,7 @@ block content
                         button.btn.btn-primary.btn-block(onclick="testConnection($('#impala-ip').val(),$('#impala-port').val())") Test Connect
 
 
-            #configMonitor.tab-pane.fade.in.active
+            #configMonitor.tab-pane.fade
                 .col-md-2
                     h4 Monitor
                 .col-md-10
@@ -200,10 +200,16 @@ block content
                             .row.tab-content
                                 #graphXXX.tab-pane.fade.in.active
                                     .col-md-12
+                                        #includedContent
                                         // img.img-responsive.center-block#monitorXXX(alt='xxxMonitor')
 
                                         script(type='text/javascript').
                                             console.log('Testing graphene')
+                                            /*
+                                            $(function () {
+                                                $("#includedContent").load("/example/index.html");
+                                            });
+                                            */
 
 
 
@@ -226,7 +232,7 @@ block content
                                 #btnFixImage.btn.btn-danger Fix Image https 501 Error.
 
 
-            #configHosts.tab-pane.fade
+            #configHosts.tab-pane.fade.in.active
                 .col-md-12
                     div(ng-app="app")
                         ng-view
@@ -573,7 +579,7 @@ block content
                     type: 'GET',
                     success: function (data) {
                         console.log('pc, Result:');
-                        console.log(data)
+                        console.log(data);
                         // console.log(JSON.parse(JSON.stringify(data)));
                         console.log('...');
 
@@ -587,7 +593,7 @@ block content
 
                     },
                     error: function (err) {
-                        console.log(err)
+                        console.log(err);
                         console.log('pc, Error ping(' + ip + ':' + port + ')', err);
                         $.notify('Error! ' + err, 'error ');
                     }
@@ -672,7 +678,7 @@ block content
                     });
 
 
-                    './executor.py -o 20 -p sync -t 1 -f stacksync_folder -x StackSync'
+                    // './executor.py -o 20 -p sync -t 1 -f stacksync_folder -x StackSync'
 
                 });
 

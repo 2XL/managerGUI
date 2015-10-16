@@ -63,6 +63,7 @@ class ManagerOps():
         else:
             print 'have {}'.format(hostname)
 
+
         self.t1downloadBenchBox(h, hostname)
         self.t2installVagrantVBox(h, hostname)
         self.t3downloadVagrantBoxImg(h, hostname)
@@ -501,7 +502,13 @@ class Manager(object):
         #print str.query
         argslist = urlparse.parse_qs(str.query)
         toExecute = getattr(self.ops, argslist['cmd'][0])
-        result = toExecute(argslist)
+
+        print argslist['cmd'][0]
+        print getattr(self.ops, argslist['cmd'][0])
+        t = threading.Thread(target=toExecute, args=(argslist,))
+        t.start()
+        result = None # None Blocking
+        #result = toExecute(argslist)
         #print argslist
         #print argslist
         print 'command {}/--->FINISH'.format(argslist['cmd'][0])
